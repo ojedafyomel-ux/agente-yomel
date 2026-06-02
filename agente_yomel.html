@@ -122,7 +122,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 <!-- PANEL DE CONFIGURACIÓN -->
 <div class="config-panel" id="config-panel">
   <label><i class="ti ti-key" style="font-size:13px"></i> API Key de Gemini:</label>
-  <input class="config-input" type="password" id="api-key-input" placeholder="AIza..."/>
+  <input class="config-input" type="password" id="api-key-input" placeholder="gsk_..."/>
   <button class="btn-config" onclick="guardarConfig()">
     <i class="ti ti-check"></i> Conectar
   </button>
@@ -142,11 +142,11 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 </div>
 
 <script>
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQaH1TSYU2rSc6chdqOSGY6zjkFn-fwUkpdwfx-hxSiDnRXSdp6-cUzWakOVstWNAZjAI--NIszIf7v/pub?gid=0&single=true&output=csv';
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQaH1TSYU2rSc6chdqOSGY6zjkFn-fwUkpdwfx-hxSiDnRXSdp6-cUzWakOVstWNAZjAI--NIszIf7v/pub?output=csv';
 const DRIVE_FOLDER = '1GajR2WgTQAYrjrjpVYvngQf0H9G2m_z9';
-const GEMINI_API   = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+const GROQ_API = 'https://api.groq.com/openai/v1/chat/completions';
 
-let apiKey = localStorage.getItem('yomel_gemini_key') || '';
+let apiKey = localStorage.getItem('yomel_groq_key') || '';
 let ordenesCSV = '';
 let conversacion = [];
 let enviando = false;
@@ -159,12 +159,12 @@ if (apiKey) {
 
 function guardarConfig() {
   const key = document.getElementById('api-key-input').value.trim();
-  if (!key.startsWith('AIza') && !key.startsWith('AQ.')) {
-    alert('La API Key no parece válida. Debe empezar con AIza... o AQ...');
+  if (!key.startsWith('gsk_')) {
+    alert('La API Key no parece válida. Debe empezar con gsk_...');
     return;
   }
   apiKey = key;
-  localStorage.setItem('yomel_gemini_key', apiKey);
+  localStorage.setItem('yomel_groq_key', apiKey);
   activarAgente();
 }
 
@@ -313,26 +313,36 @@ INSTRUCCIONES:
   ];
 
   try {
-    const res = await fetch(`${GEMINI_API}?key=${apiKey}`, {
+    // Armar historial para Groq (formato OpenAI)
+    const messages = [
+      { role: 'system', content: systemPrompt }
+    ];
+    conversacion.forEach(m => {
+      messages.push({
+        role: m.role === 'model' ? 'assistant' : 'user',
+        content: m.parts[0].text
+      });
+    });
+
+    const res = await fetch(GROQ_API, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
       body: JSON.stringify({
-        contents: conversacion.length === 1
-          ? [{ role: 'user', parts: [{ text: systemPrompt + '\n\nConsulta: ' + texto }] }]
-          : [
-              { role: 'user', parts: [{ text: systemPrompt }] },
-              { role: 'model', parts: [{ text: 'Entendido, estoy listo para ayudar al equipo técnico de Yomel.' }] },
-              ...conversacion
-            ],
-        generationConfig: { temperature: 0.3, maxOutputTokens: 1500 }
+        model: 'llama-3.3-70b-versatile',
+        messages: messages,
+        temperature: 0.3,
+        max_tokens: 1500
       })
     });
 
     const data = await res.json();
     quitarTyping();
 
-    if (data.candidates && data.candidates[0]) {
-      const respuesta = data.candidates[0].content.parts[0].text;
+    if (data.choices && data.choices[0]) {
+      const respuesta = data.choices[0].message.content;
       conversacion.push({ role: 'model', parts: [{ text: respuesta }] });
       agregarMensaje('agent', respuesta, 'Historial OTs · Base técnica Yomel');
     } else if (data.error) {
