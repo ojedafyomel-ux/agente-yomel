@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Agente Técnico — Yomel</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --rojo:#E8231A;
+  --rojo-dark:#b51a12;
+  --rojo-light:#fdecea;
+  --rojo-border:#f5b7b1;
+  --bg:#f7f7f7;
+  --card:#ffffff;
+  --text:#1a1a1a;
+  --text-sec:#666;
+  --text-ter:#999;
+  --border:#e0e0e0;
+  --sans:'IBM Plex Sans',sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+
+/* HEADER */
+.header{background:var(--rojo);padding:14px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(232,35,26,0.3);}
+.header img{height:38px;border-radius:6px;flex-shrink:0;}
+.header-text h1{font-size:15px;font-weight:600;color:white;margin:0;}
+.header-text p{font-size:12px;color:rgba(255,255,255,0.7);margin:0;}
+.header-status{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,0.8);}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+/* CONFIG PANEL */
+.config-panel{background:var(--card);border-bottom:2px solid var(--rojo-border);padding:14px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.config-panel label{font-size:12px;font-weight:600;color:var(--text-sec);white-space:nowrap;}
+.config-input{flex:1;min-width:200px;border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-size:13px;font-family:var(--mono);color:var(--text);background:var(--bg);}
+.config-input:focus{outline:none;border-color:var(--rojo);}
+.btn-config{background:var(--rojo);color:white;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.btn-config:hover{background:var(--rojo-dark);}
+.config-ok{font-size:12px;color:#16a34a;display:flex;align-items:center;gap:4px;display:none;}
+
+/* CHAT */
+.chat-area{flex:1;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column;gap:16px;max-width:800px;width:100%;margin:0 auto;}
+
+/* BIENVENIDA */
+.welcome{background:var(--card);border:1.5px solid var(--rojo-border);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px;}
+.welcome-header{display:flex;align-items:center;gap:10px;}
+.welcome-icon{width:40px;height:40px;border-radius:10px;background:var(--rojo-light);display:flex;align-items:center;justify-content:center;color:var(--rojo);font-size:20px;flex-shrink:0;}
+.welcome-title{font-size:15px;font-weight:600;color:var(--rojo);}
+.welcome-desc{font-size:13.5px;color:var(--text-sec);line-height:1.6;}
+.fuentes{display:flex;gap:8px;flex-wrap:wrap;}
+.fuente-tag{display:inline-flex;align-items:center;gap:5px;background:var(--rojo-light);border:1px solid var(--rojo-border);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--rojo);font-weight:500;}
+.suggestions{display:flex;flex-direction:column;gap:6px;}
+.suggestion-btn{background:#fff8f8;border:1.5px solid var(--rojo-border);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--rojo);cursor:pointer;text-align:left;font-family:var(--sans);transition:background 0.15s;display:flex;align-items:center;gap:8px;}
+.suggestion-btn:hover{background:var(--rojo-light);}
+
+/* MENSAJES */
+.msg{display:flex;flex-direction:column;gap:4px;animation:fadeIn 0.2s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.msg.user{align-items:flex-end;}
+.msg.agent{align-items:flex-start;}
+.msg-label{font-size:11px;font-weight:500;color:var(--text-ter);padding:0 4px;display:flex;align-items:center;gap:4px;}
+.msg-bubble{max-width:88%;padding:12px 16px;border-radius:14px;font-size:14px;line-height:1.7;}
+.msg.user .msg-bubble{background:var(--rojo);color:white;border-bottom-right-radius:4px;}
+.msg.agent .msg-bubble{background:var(--card);border:1.5px solid var(--border);color:var(--text);border-bottom-left-radius:4px;}
+.msg-time{font-size:10px;color:var(--text-ter);font-family:var(--mono);padding:0 4px;}
+
+/* TYPING */
+.typing-bubble{background:var(--card);border:1.5px solid var(--border);border-radius:14px;border-bottom-left-radius:4px;padding:13px 18px;display:flex;gap:5px;align-items:center;width:fit-content;}
+.typing-dot{width:7px;height:7px;border-radius:50%;background:var(--text-ter);animation:typing 1.2s infinite;}
+.typing-dot:nth-child(2){animation-delay:0.2s;}
+.typing-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes typing{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-5px);}}
+
+/* FUENTE TAG */
+.msg-source{display:inline-flex;align-items:center;gap:4px;background:var(--rojo-light);border:1px solid var(--rojo-border);border-radius:5px;padding:2px 8px;font-size:11px;color:var(--rojo);font-family:var(--mono);margin-top:6px;}
+
+/* MARKDOWN */
+.msg-bubble strong{font-weight:600;}
+.msg-bubble ul,.msg-bubble ol{padding-left:20px;margin:6px 0;}
+.msg-bubble li{margin:4px 0;}
+.msg-bubble p{margin:4px 0;}
+.msg-bubble p:first-child{margin-top:0;}
+.msg-bubble p:last-child{margin-bottom:0;}
+.msg-bubble h3{font-size:14px;font-weight:600;margin:8px 0 4px;}
+
+/* INPUT */
+.input-area{background:var(--card);border-top:1.5px solid var(--border);padding:14px 16px;position:sticky;bottom:0;}
+.input-wrap{max-width:800px;margin:0 auto;display:flex;gap:10px;align-items:flex-end;}
+.input-box{flex:1;border:2px solid var(--border);border-radius:12px;padding:11px 14px;font-size:14px;font-family:var(--sans);color:var(--text);background:var(--bg);resize:none;min-height:46px;max-height:130px;outline:none;transition:border-color 0.15s;line-height:1.5;}
+.input-box:focus{border-color:var(--rojo);}
+.input-box::placeholder{color:var(--text-ter);}
+.input-box:disabled{opacity:0.5;cursor:not-allowed;}
+.send-btn{width:46px;height:46px;border-radius:12px;background:var(--rojo);border:none;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;transition:background 0.15s;}
+.send-btn:hover{background:var(--rojo-dark);}
+.send-btn:disabled{background:var(--border);cursor:not-allowed;}
+.input-hint{font-size:11px;color:var(--text-ter);margin-top:6px;text-align:center;}
+
+/* ALERTA */
+.alert{background:#fff8f8;border:1.5px solid var(--rojo-border);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--rojo);display:flex;align-items:center;gap:8px;margin:0 16px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div style="width:38px;height:38px;border-radius:8px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;color:white;font-size:20px;flex-shrink:0;">
+    <i class="ti ti-robot"></i>
+  </div>
+  <div class="header-text">
+    <h1>Agente Técnico — Yomel</h1>
+    <p>Maquinaria agrícola · Consultas de servicio</p>
+  </div>
+  <div class="header-status">
+    <div class="status-dot"></div>
+    En línea
+  </div>
+</div>
+
+<!-- PANEL DE CONFIGURACIÓN -->
+<div class="config-panel" id="config-panel">
+  <label><i class="ti ti-key" style="font-size:13px"></i> API Key de Gemini:</label>
+  <input class="config-input" type="password" id="api-key-input" placeholder="AIza..."/>
+  <button class="btn-config" onclick="guardarConfig()">
+    <i class="ti ti-check"></i> Conectar
+  </button>
+  <span class="config-ok" id="config-ok"><i class="ti ti-circle-check"></i> Conectado</span>
+</div>
+
+<div class="chat-area" id="chat-area"></div>
+
+<div class="input-area">
+  <div class="input-wrap">
+    <textarea class="input-box" id="input-box" placeholder="Describí el problema de la máquina…" rows="1" disabled></textarea>
+    <button class="send-btn" id="send-btn" disabled>
+      <i class="ti ti-arrow-up"></i>
+    </button>
+  </div>
+  <div class="input-hint">Enter para enviar · Shift+Enter para nueva línea</div>
+</div>
+
+<script>
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQaH1TSYU2rSc6chdqOSGY6zjkFn-fwUkpdwfx-hxSiDnRXSdp6-cUzWakOVstWNAZjAI--NIszIf7v/pub?gid=0&single=true&output=csv';
+const DRIVE_FOLDER = '1GajR2WgTQAYrjrjpVYvngQf0H9G2m_z9';
+const GEMINI_API   = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+
+let apiKey = localStorage.getItem('yomel_gemini_key') || '';
+let ordenesCSV = '';
+let conversacion = [];
+let enviando = false;
+
+// Init
+if (apiKey) {
+  document.getElementById('api-key-input').value = apiKey;
+  activarAgente();
+}
+
+function guardarConfig() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key.startsWith('AIza') && !key.startsWith('AQ.')) {
+    alert('La API Key no parece válida. Debe empezar con AIza... o AQ...');
+    return;
+  }
+  apiKey = key;
+  localStorage.setItem('yomel_gemini_key', apiKey);
+  activarAgente();
+}
+
+async function activarAgente() {
+  document.getElementById('config-ok').style.display = 'flex';
+  document.getElementById('api-key-input').disabled = true;
+  mostrarCargando();
+  await cargarOrdenes();
+}
+
+function mostrarCargando() {
+  const chat = document.getElementById('chat-area');
+  chat.innerHTML = `<div class="alert"><i class="ti ti-loader-2" style="animation:spin 1s linear infinite;display:inline-block"></i> Cargando historial de órdenes…</div>`;
+}
+
+async function cargarOrdenes() {
+  try {
+    const res = await fetch(CSV_URL);
+    ordenesCSV = await res.text();
+    const filas = ordenesCSV.trim().split('\n').length - 1;
+    mostrarBienvenida(filas);
+    habilitarInput();
+  } catch(e) {
+    document.getElementById('chat-area').innerHTML = `<div class="alert"><i class="ti ti-alert-triangle"></i> No se pudo cargar el historial. Verificá tu conexión.</div>`;
+  }
+}
+
+function mostrarBienvenida(filas) {
+  const chat = document.getElementById('chat-area');
+  chat.innerHTML = '';
+  const div = document.createElement('div');
+  div.className = 'welcome';
+  div.innerHTML = `
+    <div class="welcome-header">
+      <div class="welcome-icon"><i class="ti ti-sparkles"></i></div>
+      <div>
+        <div class="welcome-title">Agente listo para consultas</div>
+      </div>
+    </div>
+    <div class="welcome-desc">Tengo acceso a <strong>${filas} orden${filas!==1?'es':''} de servicio</strong> y a la base de documentación técnica de Yomel. Podés preguntarme sobre fallas, diagnósticos, piezas o historial de máquinas.</div>
+    <div class="fuentes">
+      <span class="fuente-tag"><i class="ti ti-table" style="font-size:12px"></i> Historial de OTs</span>
+      <span class="fuente-tag"><i class="ti ti-folder" style="font-size:12px"></i> Base técnica Drive</span>
+    </div>
+    <div class="suggestions">
+      <button class="suggestion-btn" onclick="usarSugerencia(this)"><i class="ti ti-tool"></i> ¿Cuáles son los problemas más frecuentes?</button>
+      <button class="suggestion-btn" onclick="usarSugerencia(this)"><i class="ti ti-tractor"></i> ¿Qué fallas tuvo la ROTOENFARDADORA?</button>
+      <button class="suggestion-btn" onclick="usarSugerencia(this)"><i class="ti ti-list-check"></i> ¿Qué piezas se reemplazaron más?</button>
+      <button class="suggestion-btn" onclick="usarSugerencia(this)"><i class="ti ti-search"></i> ¿Cómo diagnostico un problema en la ENCINTADORA?</button>
+    </div>
+  `;
+  chat.appendChild(div);
+}
+
+function habilitarInput() {
+  document.getElementById('input-box').disabled = false;
+  document.getElementById('send-btn').disabled = false;
+  document.getElementById('input-box').focus();
+}
+
+function usarSugerencia(btn) {
+  document.getElementById('input-box').value = btn.textContent.trim();
+  enviar();
+}
+
+function hora() {
+  return new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
+}
+
+function renderMarkdown(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/^### (.+)/gm,'<h3>$1</h3>')
+    .replace(/^- (.+)/gm,'<li>$1</li>')
+    .replace(/(<li>[\s\S]*?<\/li>)/g,'<ul>$1</ul>')
+    .replace(/^\d+\. (.+)/gm,'<li>$1</li>')
+    .replace(/\n\n/g,'</p><p>')
+    .replace(/\n/g,'<br>')
+    .replace(/^(.+)$/s,'<p>$1</p>');
+}
+
+function agregarMensaje(rol, texto, fuente) {
+  const chat = document.getElementById('chat-area');
+  const div = document.createElement('div');
+  div.className = `msg ${rol}`;
+  const esAgente = rol === 'agent';
+  div.innerHTML = `
+    <div class="msg-label">${esAgente ? '<i class="ti ti-robot" style="font-size:12px"></i> Agente Yomel' : 'Vos'}</div>
+    <div class="msg-bubble">${esAgente ? renderMarkdown(texto) : texto.replace(/</g,'&lt;')}</div>
+    ${fuente ? `<div class="msg-source"><i class="ti ti-table" style="font-size:11px"></i> ${fuente}</div>` : ''}
+    <div class="msg-time">${hora()}</div>
+  `;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function mostrarTyping() {
+  const chat = document.getElementById('chat-area');
+  const div = document.createElement('div');
+  div.id = 'typing';
+  div.className = 'msg agent';
+  div.innerHTML = `<div class="msg-label"><i class="ti ti-robot" style="font-size:12px"></i> Agente Yomel</div><div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function quitarTyping() {
+  const t = document.getElementById('typing');
+  if(t) t.remove();
+}
+
+async function enviar() {
+  if(enviando || !apiKey) return;
+  const input = document.getElementById('input-box');
+  const texto = input.value.trim();
+  if(!texto) return;
+
+  enviando = true;
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('send-btn').disabled = true;
+
+  agregarMensaje('user', texto);
+  conversacion.push({ role: 'user', parts: [{ text: texto }] });
+
+  mostrarTyping();
+
+  const systemPrompt = `Sos el asistente técnico especialista en maquinaria agrícola de Yomel. Ayudás a los técnicos de campo a resolver problemas y diagnosticar fallas.
+
+HISTORIAL DE ÓRDENES DE SERVICIO (CSV):
+${ordenesCSV}
+
+INSTRUCCIONES:
+- Respondé siempre en español, de forma clara y práctica
+- Buscá en el historial casos similares y mencioná el número de OT y la solución aplicada
+- Si no hay casos similares, usá tu conocimiento técnico de maquinaria agrícola
+- Usá listas numeradas para pasos a seguir
+- Sé conciso pero completo
+- Si necesitás más datos para diagnosticar, preguntá puntualmente
+- Tu objetivo: que el técnico resuelva el problema en el campo, rápido y bien`;
+
+  const messages = [
+    { role: 'user', parts: [{ text: systemPrompt + '\n\nPrimera consulta: ' + texto }] },
+    ...conversacion.slice(1)
+  ];
+
+  try {
+    const res = await fetch(`${GEMINI_API}?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: conversacion.length === 1
+          ? [{ role: 'user', parts: [{ text: systemPrompt + '\n\nConsulta: ' + texto }] }]
+          : [
+              { role: 'user', parts: [{ text: systemPrompt }] },
+              { role: 'model', parts: [{ text: 'Entendido, estoy listo para ayudar al equipo técnico de Yomel.' }] },
+              ...conversacion
+            ],
+        generationConfig: { temperature: 0.3, maxOutputTokens: 1500 }
+      })
+    });
+
+    const data = await res.json();
+    quitarTyping();
+
+    if (data.candidates && data.candidates[0]) {
+      const respuesta = data.candidates[0].content.parts[0].text;
+      conversacion.push({ role: 'model', parts: [{ text: respuesta }] });
+      agregarMensaje('agent', respuesta, 'Historial OTs · Base técnica Yomel');
+    } else if (data.error) {
+      agregarMensaje('agent', `Error: ${data.error.message}. Verificá tu API Key.`);
+    } else {
+      agregarMensaje('agent', 'No se pudo obtener respuesta. Intentá de nuevo.');
+    }
+  } catch(e) {
+    quitarTyping();
+    agregarMensaje('agent', 'No se pudo conectar. Verificá tu conexión a internet.');
+  }
+
+  enviando = false;
+  document.getElementById('send-btn').disabled = false;
+  input.focus();
+}
+
+// Auto-resize textarea
+const inputBox = document.getElementById('input-box');
+inputBox.addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 130) + 'px';
+});
+inputBox.addEventListener('keydown', function(e) {
+  if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); enviar(); }
+});
+document.getElementById('send-btn').addEventListener('click', enviar);
+</script>
+</body>
+</html>
