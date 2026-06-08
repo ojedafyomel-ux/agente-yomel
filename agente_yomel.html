@@ -572,7 +572,7 @@ async function selectRelevantSheets(query) {
 
 async function answerWithData(query,sheetsData,otsData) {
   const sheetBlocks=sheetsData.map(s=>`=== ${s.name} ===\n${trimCsv(s.csv,2500)}`).join('\n\n');
-  const messages=[{role:'system',content:`Sos el asistente técnico oficial de Yomel S.A., empresa argentina de maquinaria agrícola con sede en 9 de Julio, Buenos Aires. Tenés acceso a la base de conocimiento técnico completa y al historial de órdenes de trabajo (OTs).\n\nPautas:\n- Respondé en español rioplatense, técnico y preciso\n- Citá datos concretos: torques en Nm, intervalos, lubricantes, códigos de error\n- Mencioná de qué hoja proviene la información\n- Si hay OTs relacionadas, mencionalo\n- Usá listas para pasos y valores`},{role:'user',content:`CONSULTA: ${query}\n\n━━━ FICHAS TÉCNICAS ━━━\n${sheetBlocks||(ninguna)}\n\n━━━ HISTORIAL OTs ━━━\n${trimCsv(otsData,2500)}`}];
+  const messages=[{role:'system',content:`Sos el asistente técnico oficial de Yomel S.A., empresa argentina de maquinaria agrícola con sede en 9 de Julio, Buenos Aires. Tenés acceso a la base de conocimiento técnico completa y al historial de órdenes de trabajo (OTs).\n\nPautas:\n- Respondé en español rioplatense, técnico y preciso\n- Citá datos concretos: torques en Nm, intervalos, lubricantes, códigos de error\n- Mencioná de qué hoja proviene la información\n- Si hay OTs relacionadas, mencionalo\n- Usá listas para pasos y valores`},{role:'user',content:`CONSULTA: ${query}\n\n━━━ FICHAS TÉCNICAS ━━━\n${sheetBlocks||'(ninguna)'}\n\n━━━ HISTORIAL OTs ━━━\n${trimCsv(otsData,2500)}`}];
   return callGroq(messages,1500);
 }
 
@@ -619,4 +619,3 @@ if(savedKey) document.getElementById('apiKey').value=savedKey;
 </script>
 </body>
 </html>
-
