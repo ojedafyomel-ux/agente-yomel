@@ -4,24 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Agente Técnico — Yomel</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg:         #0d0f10;
-      --surface:    #141618;
-      --surface2:   #1c1f21;
-      --border:     #2a2e32;
-      --border2:    #3a3f44;
-      --accent:     #e8a020;
-      --accent2:    #c8851a;
-      --green:      #3dba6e;
-      --red:        #e05252;
-      --blue:       #4a9eff;
-      --text:       #e4e8ec;
-      --text2:      #8b959e;
-      --text3:      #555e66;
-      --mono:       'IBM Plex Mono', monospace;
-      --sans:       'IBM Plex Sans', sans-serif;
+      --bg:         #fafafa;
+      --surface:    #ffffff;
+      --surface2:   #f4f4f5;
+      --border:     #e4e4e7;
+      --border2:    #d1d1d6;
+      --accent:     #E8231A;
+      --accent2:    #c41a12;
+      --accent-bg:  #fef2f2;
+      --green:      #16a34a;
+      --green-bg:   #f0fdf4;
+      --blue:       #2563eb;
+      --blue-bg:    #eff6ff;
+      --text:       #18181b;
+      --text2:      #52525b;
+      --text3:      #a1a1aa;
+      --mono:       'JetBrains Mono', monospace;
+      --sans:       'Inter', sans-serif;
+      --radius:     10px;
+      --shadow:     0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -37,34 +41,35 @@
 
     /* ── HEADER ──────────────────────────────────────── */
     header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
+      background: var(--accent);
       padding: 0 20px;
       display: flex;
       align-items: center;
       gap: 14px;
-      height: 54px;
+      height: 60px;
       flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(232,35,26,.25);
     }
     .logo-mark {
-      width: 32px; height: 32px;
-      background: var(--accent);
-      border-radius: 6px;
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,.18);
+      border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
       font-family: var(--mono);
-      font-size: 13px; font-weight: 600;
-      color: #000;
+      font-size: 13px; font-weight: 500;
+      color: #fff;
       letter-spacing: -1px;
       flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,.25);
     }
     .header-title {
-      font-size: 14px; font-weight: 600;
-      letter-spacing: .03em;
-      color: var(--text);
+      font-size: 16px; font-weight: 600;
+      letter-spacing: .01em;
+      color: #fff;
     }
     .header-sub {
-      font-size: 11px;
-      color: var(--text3);
+      font-size: 11.5px;
+      color: rgba(255,255,255,.7);
       font-family: var(--mono);
       margin-top: 1px;
     }
@@ -77,81 +82,87 @@
     .api-input-wrap {
       display: flex;
       align-items: center;
-      gap: 6px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 4px 10px;
+      gap: 7px;
+      background: rgba(0,0,0,.2);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 8px;
+      padding: 5px 12px;
     }
     .api-input-wrap label {
       font-family: var(--mono);
-      font-size: 10px;
-      color: var(--text3);
+      font-size: 10.5px;
+      color: rgba(255,255,255,.65);
       white-space: nowrap;
+      font-weight: 500;
     }
     #apiKey {
       background: none;
       border: none;
       outline: none;
-      color: var(--text2);
+      color: rgba(255,255,255,.9);
       font-family: var(--mono);
-      font-size: 11px;
-      width: 160px;
+      font-size: 12px;
+      width: 170px;
     }
-    #apiKey::placeholder { color: var(--text3); }
+    #apiKey::placeholder { color: rgba(255,255,255,.4); }
     .status-dot {
-      width: 7px; height: 7px;
+      width: 8px; height: 8px;
       border-radius: 50%;
-      background: var(--border2);
+      background: rgba(255,255,255,.3);
       transition: background .3s;
     }
-    .status-dot.live { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .status-dot.live {
+      background: #4ade80;
+      box-shadow: 0 0 6px #4ade80;
+    }
 
     /* ── CHAT ────────────────────────────────────────── */
     #chat {
       overflow-y: auto;
-      padding: 20px;
+      padding: 24px 20px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 18px;
       scroll-behavior: smooth;
     }
-    #chat::-webkit-scrollbar { width: 4px; }
+    #chat::-webkit-scrollbar { width: 5px; }
     #chat::-webkit-scrollbar-track { background: transparent; }
-    #chat::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+    #chat::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
 
     .msg {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      max-width: 820px;
-      animation: fadeUp .25s ease;
+      gap: 5px;
+      max-width: 840px;
+      animation: fadeUp .22s ease;
     }
     @keyframes fadeUp {
       from { opacity:0; transform:translateY(8px); }
       to   { opacity:1; transform:translateY(0); }
     }
-    .msg.user { align-self: flex-end; align-items: flex-end; }
+    .msg.user  { align-self: flex-end;  align-items: flex-end; }
     .msg.agent { align-self: flex-start; align-items: flex-start; }
 
     .msg-label {
       font-family: var(--mono);
-      font-size: 10px;
+      font-size: 11px;
       color: var(--text3);
       letter-spacing: .05em;
       text-transform: uppercase;
       padding: 0 4px;
+      font-weight: 500;
     }
     .msg-bubble {
-      padding: 12px 16px;
-      border-radius: 10px;
-      font-size: 14px;
-      line-height: 1.65;
+      padding: 14px 18px;
+      border-radius: var(--radius);
+      font-size: 15px;
+      line-height: 1.7;
       max-width: 100%;
+      box-shadow: var(--shadow);
     }
     .msg.user .msg-bubble {
       background: var(--accent);
-      color: #111;
+      color: #fff;
       font-weight: 500;
       border-bottom-right-radius: 3px;
     }
@@ -164,36 +175,35 @@
     }
     .msg-meta {
       display: flex;
-      gap: 6px;
+      gap: 5px;
       flex-wrap: wrap;
+      padding: 0 2px;
     }
     .tag {
       font-family: var(--mono);
-      font-size: 10px;
-      padding: 2px 7px;
-      border-radius: 4px;
-      color: var(--text3);
-      border: 1px solid var(--border);
-      background: var(--surface2);
+      font-size: 10.5px;
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-weight: 500;
     }
-    .tag.ot  { color: var(--blue);  border-color: #1a4a7a; background: #0d1f36; }
-    .tag.kb  { color: var(--green); border-color: #1a4a28; background: #0a2014; }
-    .tag.err { color: var(--red);   border-color: #5a1a1a; background: #2a0d0d; }
+    .tag.ot  { color: var(--blue);  background: var(--blue-bg);  border: 1px solid #bfdbfe; }
+    .tag.kb  { color: var(--green); background: var(--green-bg); border: 1px solid #bbf7d0; }
+    .tag.err { color: var(--accent); background: var(--accent-bg); border: 1px solid #fecaca; }
 
-    /* Loading bubble */
+    /* Loading */
     .msg.loading .msg-bubble {
       background: var(--surface);
       border: 1px solid var(--border);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       color: var(--text2);
-      font-size: 13px;
+      font-size: 14px;
       font-family: var(--mono);
     }
     .spinner {
-      width: 14px; height: 14px;
-      border: 2px solid var(--border2);
+      width: 16px; height: 16px;
+      border: 2.5px solid var(--border2);
       border-top-color: var(--accent);
       border-radius: 50%;
       animation: spin .7s linear infinite;
@@ -204,76 +214,103 @@
     /* Welcome */
     .welcome {
       text-align: center;
-      padding: 40px 20px;
+      padding: 44px 20px;
       color: var(--text3);
     }
+    .welcome-icon {
+      width: 52px; height: 52px;
+      background: var(--accent);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      box-shadow: 0 4px 14px rgba(232,35,26,.3);
+    }
+    .welcome-icon svg { width: 26px; height: 26px; fill: #fff; }
     .welcome h2 {
       font-size: 22px;
-      font-weight: 300;
-      color: var(--text2);
+      font-weight: 600;
+      color: var(--text);
       margin-bottom: 8px;
     }
-    .welcome p { font-size: 13px; line-height: 1.7; max-width: 420px; margin: 0 auto 24px; }
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .welcome p {
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: 460px;
+      margin: 0 auto 28px;
+      color: var(--text2);
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 680px; margin: 0 auto; }
     .chip {
-      background: var(--surface2);
-      border: 1px solid var(--border);
+      background: var(--surface);
+      border: 1.5px solid var(--border);
       border-radius: 20px;
-      padding: 7px 14px;
-      font-size: 12px;
+      padding: 8px 16px;
+      font-size: 13.5px;
       color: var(--text2);
       cursor: pointer;
-      transition: border-color .15s, color .15s;
+      transition: border-color .15s, color .15s, background .15s;
+      font-weight: 500;
+      box-shadow: var(--shadow);
     }
-    .chip:hover { border-color: var(--accent); color: var(--accent); }
+    .chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-bg);
+    }
 
     /* ── INPUT BAR ───────────────────────────────────── */
     .input-bar {
       background: var(--surface);
-      border-top: 1px solid var(--border);
+      border-top: 1.5px solid var(--border);
       padding: 14px 20px;
       display: flex;
       gap: 10px;
       align-items: flex-end;
+      box-shadow: 0 -2px 8px rgba(0,0,0,.05);
     }
     #queryInput {
       flex: 1;
       background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
       color: var(--text);
       font-family: var(--sans);
-      font-size: 14px;
-      padding: 10px 14px;
+      font-size: 15px;
+      padding: 11px 16px;
       resize: none;
       outline: none;
-      line-height: 1.5;
-      max-height: 120px;
-      min-height: 42px;
-      transition: border-color .15s;
+      line-height: 1.55;
+      max-height: 130px;
+      min-height: 46px;
+      transition: border-color .15s, box-shadow .15s;
     }
-    #queryInput:focus { border-color: var(--border2); }
+    #queryInput:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(232,35,26,.1);
+      background: var(--surface);
+    }
     #queryInput::placeholder { color: var(--text3); }
     #sendBtn {
       background: var(--accent);
       border: none;
-      border-radius: 8px;
-      width: 42px; height: 42px;
+      border-radius: var(--radius);
+      width: 46px; height: 46px;
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: background .15s, transform .1s;
+      transition: background .15s, transform .1s, box-shadow .15s;
       flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(232,35,26,.3);
     }
-    #sendBtn:hover { background: var(--accent2); }
+    #sendBtn:hover { background: var(--accent2); box-shadow: 0 4px 12px rgba(232,35,26,.4); }
     #sendBtn:active { transform: scale(.95); }
-    #sendBtn:disabled { background: var(--border2); cursor: not-allowed; }
-    #sendBtn svg { width: 18px; height: 18px; fill: #111; }
+    #sendBtn:disabled { background: var(--border2); cursor: not-allowed; box-shadow: none; }
+    #sendBtn svg { width: 19px; height: 19px; fill: #fff; }
     .input-hint {
-      font-size: 11px;
+      font-size: 11.5px;
       color: var(--text3);
       font-family: var(--mono);
       white-space: nowrap;
-      padding-bottom: 12px;
+      padding-bottom: 14px;
     }
   </style>
 </head>
@@ -296,6 +333,9 @@
 
 <div id="chat">
   <div class="welcome" id="welcome">
+    <div class="welcome-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-4H7l5-8v4h4l-5 8z"/></svg>
+    </div>
     <h2>¿En qué podemos ayudarte hoy?</h2>
     <p>Consultá sobre fichas técnicas, mantenimiento, fallas, torques, lubricación y el historial de órdenes de trabajo de las máquinas Yomel y Mascar.</p>
     <div class="chips">
@@ -320,15 +360,11 @@
 </div>
 
 <script>
-// ════════════════════════════════════════════════════
-//  CONFIGURACIÓN
-// ════════════════════════════════════════════════════
 const SPREADSHEET_ID  = '198HMkr1g50V5r7vDB6Z5uwmdS5Z6UzN52YCY9oAlqV0';
 const OTS_CSV_URL     = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVcyVNJzmu8UBR5yXccxxbbqPKaQPKIrWbLMFhmlzp9RwTIxBPBSeKTVXxiRYGIzyPy5wX9RHqbXhd/pub?output=csv';
 const GROQ_MODEL      = 'llama-3.3-70b-versatile';
 const GROQ_URL        = 'https://api.groq.com/openai/v1/chat/completions';
 
-// ── Catálogo completo de hojas (agrupado por familia/tema) ──
 const SHEET_CATALOG = `
 MASCAR MAGNA (rotoempacadora de cámara fija):
   MM_Ficha_Tecnica → especificaciones completas
@@ -462,308 +498,125 @@ YOMEL — Fertilizadoras FA 1.18 / FP 1.18:
   YO_FA-FP118_Regulacion → regulación y cálculo de dosis
 `.trim();
 
-// ════════════════════════════════════════════════════
-//  UTILIDADES
-// ════════════════════════════════════════════════════
-function getKey() {
-  return document.getElementById('apiKey').value.trim();
-}
+function getKey() { return document.getElementById('apiKey').value.trim(); }
+function autoResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,130)+'px'; }
+function handleKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();handleSend();} }
+function useChip(el) { document.getElementById('queryInput').value=el.textContent; autoResize(document.getElementById('queryInput')); handleSend(); }
+function scrollChat() { const c=document.getElementById('chat'); c.scrollTop=c.scrollHeight; }
 
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-}
-
-function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    handleSend();
-  }
-}
-
-function useChip(el) {
-  document.getElementById('queryInput').value = el.textContent;
-  autoResize(document.getElementById('queryInput'));
-  handleSend();
-}
-
-function scrollChat() {
-  const chat = document.getElementById('chat');
-  chat.scrollTop = chat.scrollHeight;
-}
-
-// ── Append messages ──────────────────────────────
-function appendMsg(role, content, tags = []) {
-  const welcome = document.getElementById('welcome');
-  if (welcome) welcome.remove();
-
-  const chat = document.getElementById('chat');
-  const div = document.createElement('div');
-  div.className = `msg ${role}`;
-
-  const label = role === 'user' ? 'Técnico' : 'Agente IA';
-  div.innerHTML = `
+function appendMsg(role, content, tags=[]) {
+  const welcome=document.getElementById('welcome'); if(welcome) welcome.remove();
+  const chat=document.getElementById('chat');
+  const div=document.createElement('div'); div.className=`msg ${role}`;
+  const label=role==='user'?'Técnico':'Agente IA';
+  div.innerHTML=`
     <div class="msg-label">${label}</div>
     <div class="msg-bubble">${escHtml(content)}</div>
-    ${tags.length ? `<div class="msg-meta">${tags.map(t=>`<span class="tag ${t.cls}">${t.text}</span>`).join('')}</div>` : ''}
+    ${tags.length?`<div class="msg-meta">${tags.map(t=>`<span class="tag ${t.cls}">${t.text}</span>`).join('')}</div>`:''}
   `;
-  chat.appendChild(div);
-  scrollChat();
-  return div;
+  chat.appendChild(div); scrollChat(); return div;
 }
 
 function appendLoading(text) {
-  const welcome = document.getElementById('welcome');
-  if (welcome) welcome.remove();
-
-  const chat = document.getElementById('chat');
-  const div = document.createElement('div');
-  div.className = 'msg agent loading';
-  div.innerHTML = `
-    <div class="msg-label">Agente IA</div>
-    <div class="msg-bubble">
-      <div class="spinner"></div>
-      <span id="loadingText">${escHtml(text)}</span>
-    </div>
-  `;
-  chat.appendChild(div);
-  scrollChat();
-  return div;
+  const welcome=document.getElementById('welcome'); if(welcome) welcome.remove();
+  const chat=document.getElementById('chat');
+  const div=document.createElement('div'); div.className='msg agent loading';
+  div.innerHTML=`<div class="msg-label">Agente IA</div><div class="msg-bubble"><div class="spinner"></div><span id="loadingText">${escHtml(text)}</span></div>`;
+  chat.appendChild(div); scrollChat(); return div;
 }
 
-function setLoadingText(el, text) {
-  const span = el.querySelector('#loadingText');
-  if (span) span.textContent = text;
-}
-
-function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function setDot(live) {
-  document.getElementById('statusDot').className = 'status-dot' + (live ? ' live' : '');
-}
-
-// ════════════════════════════════════════════════════
-//  FETCH DE DATOS
-// ════════════════════════════════════════════════════
+function setLoadingText(el,text) { const s=el.querySelector('#loadingText'); if(s) s.textContent=text; }
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function setDot(live) { document.getElementById('statusDot').className='status-dot'+(live?' live':''); }
 
 async function fetchSheet(sheetName) {
-  const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
-  const resp = await fetch(url);
-  if (!resp.ok) throw new Error(`HTTP ${resp.status} para hoja "${sheetName}"`);
-  const text = await resp.text();
-  // Si Google devuelve un HTML de error en lugar de CSV
-  if (text.trim().startsWith('<!DOCTYPE')) throw new Error(`Hoja "${sheetName}" no encontrada`);
+  const url=`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
+  const resp=await fetch(url);
+  if(!resp.ok) throw new Error(`HTTP ${resp.status} para hoja "${sheetName}"`);
+  const text=await resp.text();
+  if(text.trim().startsWith('<!DOCTYPE')) throw new Error(`Hoja "${sheetName}" no encontrada`);
   return text;
 }
 
 async function fetchOTs() {
-  const resp = await fetch(OTS_CSV_URL);
-  if (!resp.ok) throw new Error(`HTTP ${resp.status} en OTs`);
+  const resp=await fetch(OTS_CSV_URL);
+  if(!resp.ok) throw new Error(`HTTP ${resp.status} en OTs`);
   return await resp.text();
 }
 
-function trimCsv(csv, maxChars = 3000) {
-  if (csv.length <= maxChars) return csv;
-  const lines = csv.split('\n');
-  let result = lines[0] + '\n'; // always keep header
-  let i = 1;
-  while (i < lines.length && result.length + lines[i].length < maxChars) {
-    result += lines[i] + '\n';
-    i++;
-  }
-  if (i < lines.length) result += `… (${lines.length - i} filas más omitidas por extensión)`;
+function trimCsv(csv,maxChars=3000) {
+  if(csv.length<=maxChars) return csv;
+  const lines=csv.split('\n'); let result=lines[0]+'\n'; let i=1;
+  while(i<lines.length&&result.length+lines[i].length<maxChars){result+=lines[i]+'\n';i++;}
+  if(i<lines.length) result+=`… (${lines.length-i} filas más omitidas)`;
   return result;
 }
 
-// ════════════════════════════════════════════════════
-//  GROQ API
-// ════════════════════════════════════════════════════
-
-async function callGroq(messages, maxTokens = 1500) {
-  const key = getKey();
-  if (!key) throw new Error('Ingresá tu GROQ API Key en la parte superior derecha.');
-
-  const resp = await fetch(GROQ_URL, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${key}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      model: GROQ_MODEL,
-      messages,
-      max_tokens: maxTokens,
-      temperature: 0.1
-    })
-  });
-
-  if (!resp.ok) {
-    const err = await resp.json().catch(()=>({}));
-    throw new Error(err?.error?.message || `Error Groq HTTP ${resp.status}`);
-  }
-
-  const data = await resp.json();
-  return data.choices?.[0]?.message?.content ?? '';
+async function callGroq(messages,maxTokens=1500) {
+  const key=getKey();
+  if(!key) throw new Error('Ingresá tu GROQ API Key en el campo de arriba a la derecha.');
+  const resp=await fetch(GROQ_URL,{method:'POST',headers:{'Authorization':`Bearer ${key}`,'Content-Type':'application/json'},body:JSON.stringify({model:GROQ_MODEL,messages,max_tokens:maxTokens,temperature:0.1})});
+  if(!resp.ok){const err=await resp.json().catch(()=>({}));throw new Error(err?.error?.message||`Error Groq HTTP ${resp.status}`);}
+  const data=await resp.json();
+  return data.choices?.[0]?.message?.content??'';
 }
 
-// ── Paso 1: seleccionar hojas relevantes ─────────
 async function selectRelevantSheets(query) {
-  const messages = [
-    {
-      role: 'system',
-      content: `Sos un selector de documentación técnica de maquinaria agrícola.
-Tu tarea es elegir las hojas de datos más relevantes para responder una consulta.
-RESPONDÉ ÚNICAMENTE con un JSON array de strings con los nombres exactos de las hojas.
-Seleccioná entre 2 y 4 hojas como máximo. Priorizá siempre la hoja más específica al modelo mencionado.`
-    },
-    {
-      role: 'user',
-      content: `Consulta del técnico: "${query}"
-
-Catálogo de hojas disponibles:
-${SHEET_CATALOG}
-
-Respondé SOLO con JSON array. Ejemplos:
-["MM_Solucion_Problemas", "MM_Mantenimiento"]
-["YO_DELTA6150_FichaTecnica", "YO_DELTA6150_Mantenimiento", "YO_TORQUES_AJUSTES"]`
-    }
-  ];
-
-  const raw = await callGroq(messages, 300);
-  const match = raw.match(/\[[\s\S]*?\]/);
-  if (!match) throw new Error('No se pudo identificar las hojas relevantes.');
-
-  let sheets;
-  try { sheets = JSON.parse(match[0]); }
-  catch { throw new Error('Respuesta de selección de hojas inválida.'); }
-
-  return sheets.filter(s => typeof s === 'string' && s.trim().length > 0).slice(0, 4);
+  const messages=[{role:'system',content:`Sos un selector de documentación técnica de maquinaria agrícola. Elegí las hojas más relevantes para responder la consulta. RESPONDÉ ÚNICAMENTE con un JSON array de strings con los nombres exactos de las hojas. Seleccioná entre 2 y 4 hojas como máximo.`},{role:'user',content:`Consulta: "${query}"\n\nCatálogo:\n${SHEET_CATALOG}\n\nRespondé SOLO con JSON array.`}];
+  const raw=await callGroq(messages,300);
+  const match=raw.match(/\[[\s\S]*?\]/);
+  if(!match) throw new Error('No se pudo identificar las hojas relevantes.');
+  let sheets; try{sheets=JSON.parse(match[0]);}catch{throw new Error('Respuesta inválida.');}
+  return sheets.filter(s=>typeof s==='string'&&s.trim().length>0).slice(0,4);
 }
 
-// ── Paso 2: responder con datos ──────────────────
-async function answerWithData(query, sheetsData, otsData) {
-  const sheetBlocks = sheetsData.map(s =>
-    `=== ${s.name} ===\n${trimCsv(s.csv, 2500)}`
-  ).join('\n\n');
-
-  const messages = [
-    {
-      role: 'system',
-      content: `Sos el asistente técnico oficial de Yomel S.A., empresa argentina de maquinaria agrícola con sede en 9 de Julio, Buenos Aires.
-Tenés acceso a la base de conocimiento técnico completa y al historial de órdenes de trabajo (OTs).
-
-Pautas de respuesta:
-- Respondé siempre en español rioplatense, de forma técnica y precisa
-- Citá datos concretos cuando los tengas: torques en Nm, intervalos de mantenimiento, lubricantes específicos, códigos de error, etc.
-- Si encontrás información en las fichas técnicas, mencioná de qué hoja proviene
-- Si hay OTs relacionadas con el problema, mencionalo
-- Si la información no está en los datos provistos, indicalo claramente y sugerí al técnico consultar el manual o contactar soporte
-- Usá listas cuando listás pasos o valores para mejor lectura`
-    },
-    {
-      role: 'user',
-      content: `CONSULTA DEL TÉCNICO:
-${query}
-
-━━━ FICHAS TÉCNICAS CONSULTADAS ━━━
-${sheetBlocks || '(ninguna hoja seleccionada)'}
-
-━━━ HISTORIAL DE ÓRDENES DE TRABAJO ━━━
-${trimCsv(otsData, 2500)}
-
-Respondé la consulta basándote en estos datos.`
-    }
-  ];
-
-  return callGroq(messages, 1500);
+async function answerWithData(query,sheetsData,otsData) {
+  const sheetBlocks=sheetsData.map(s=>`=== ${s.name} ===\n${trimCsv(s.csv,2500)}`).join('\n\n');
+  const messages=[{role:'system',content:`Sos el asistente técnico oficial de Yomel S.A., empresa argentina de maquinaria agrícola con sede en 9 de Julio, Buenos Aires. Tenés acceso a la base de conocimiento técnico completa y al historial de órdenes de trabajo (OTs).\n\nPautas:\n- Respondé en español rioplatense, técnico y preciso\n- Citá datos concretos: torques en Nm, intervalos, lubricantes, códigos de error\n- Mencioná de qué hoja proviene la información\n- Si hay OTs relacionadas, mencionalo\n- Usá listas para pasos y valores`},{role:'user',content:`CONSULTA: ${query}\n\n━━━ FICHAS TÉCNICAS ━━━\n${sheetBlocks||(ninguna)}\n\n━━━ HISTORIAL OTs ━━━\n${trimCsv(otsData,2500)}`}];
+  return callGroq(messages,1500);
 }
 
-// ════════════════════════════════════════════════════
-//  MAIN HANDLER
-// ════════════════════════════════════════════════════
-let isProcessing = false;
+let isProcessing=false;
 
 async function handleSend() {
-  if (isProcessing) return;
-
-  const input = document.getElementById('queryInput');
-  const query = input.value.trim();
-  if (!query) return;
-
-  const key = getKey();
-  if (!key) {
-    appendMsg('agent', '⚠ Por favor ingresá tu Groq API Key en el campo de arriba a la derecha antes de consultar.', [{ cls: 'err', text: 'sin API key' }]);
-    return;
-  }
-
-  isProcessing = true;
-  document.getElementById('sendBtn').disabled = true;
-  input.value = '';
-  input.style.height = 'auto';
-  setDot(false);
-
-  appendMsg('user', query);
-
-  const loadEl = appendLoading('Identificando documentos relevantes…');
-
+  if(isProcessing) return;
+  const input=document.getElementById('queryInput');
+  const query=input.value.trim(); if(!query) return;
+  const key=getKey();
+  if(!key){appendMsg('agent','⚠ Por favor ingresá tu Groq API Key en el campo de arriba a la derecha.',[{cls:'err',text:'sin API key'}]);return;}
+  isProcessing=true; document.getElementById('sendBtn').disabled=true;
+  input.value=''; input.style.height='auto'; setDot(false);
+  appendMsg('user',query);
+  const loadEl=appendLoading('Identificando documentos relevantes…');
   try {
-    // ── Paso 1: seleccionar hojas ──
-    const selectedSheets = await selectRelevantSheets(query);
-
-    setLoadingText(loadEl, `Consultando ${selectedSheets.length} ficha(s) técnica(s)…`);
-
-    // ── Paso 2: fetch paralelo de hojas + OTs ──
-    const [sheetsResults, otsRaw] = await Promise.all([
-      Promise.allSettled(selectedSheets.map(async name => ({
-        name,
-        csv: await fetchSheet(name)
-      }))),
-      fetchOTs().catch(() => '(no se pudo cargar el historial de OTs)')
+    const selectedSheets=await selectRelevantSheets(query);
+    setLoadingText(loadEl,`Consultando ${selectedSheets.length} ficha(s) técnica(s)…`);
+    const [sheetsResults,otsRaw]=await Promise.all([
+      Promise.allSettled(selectedSheets.map(async name=>({name,csv:await fetchSheet(name)}))),
+      fetchOTs().catch(()=>'(no se pudo cargar el historial de OTs)')
     ]);
-
-    const sheetsData = sheetsResults
-      .filter(r => r.status === 'fulfilled')
-      .map(r => r.value);
-
-    const failedSheets = sheetsResults
-      .filter(r => r.status === 'rejected')
-      .map((r, i) => selectedSheets[i]);
-
-    setLoadingText(loadEl, 'Procesando respuesta con IA…');
-
-    // ── Paso 3: respuesta final ──
-    const answer = await answerWithData(query, sheetsData, otsRaw);
-
-    // Reemplazar loading por respuesta
+    const sheetsData=sheetsResults.filter(r=>r.status==='fulfilled').map(r=>r.value);
+    const failedSheets=sheetsResults.filter(r=>r.status==='rejected').map((r,i)=>selectedSheets[i]);
+    setLoadingText(loadEl,'Procesando respuesta con IA…');
+    const answer=await answerWithData(query,sheetsData,otsRaw);
     loadEl.remove();
-
-    // Construir tags
-    const tags = [];
-    tags.push({ cls: 'ot', text: '📋 OTs' });
-    sheetsData.forEach(s => tags.push({ cls: 'kb', text: `📄 ${s.name}` }));
-    if (failedSheets.length) failedSheets.forEach(n => tags.push({ cls: 'err', text: `✗ ${n}` }));
-
-    appendMsg('agent', answer, tags);
-    setDot(true);
-
-  } catch (err) {
+    const tags=[{cls:'ot',text:'📋 OTs'}];
+    sheetsData.forEach(s=>tags.push({cls:'kb',text:`📄 ${s.name}`}));
+    if(failedSheets.length) failedSheets.forEach(n=>tags.push({cls:'err',text:`✗ ${n}`}));
+    appendMsg('agent',answer,tags); setDot(true);
+  } catch(err) {
     loadEl.remove();
-    appendMsg('agent', `Error: ${err.message}`, [{ cls: 'err', text: 'error' }]);
+    appendMsg('agent',`Error: ${err.message}`,[{cls:'err',text:'error'}]);
     setDot(false);
   } finally {
-    isProcessing = false;
-    document.getElementById('sendBtn').disabled = false;
+    isProcessing=false; document.getElementById('sendBtn').disabled=false;
   }
 }
 
-// Guardar API key en sessionStorage
-document.getElementById('apiKey').addEventListener('input', function() {
-  sessionStorage.setItem('yomel_groq_key', this.value);
-});
-const savedKey = sessionStorage.getItem('yomel_groq_key');
-if (savedKey) document.getElementById('apiKey').value = savedKey;
+document.getElementById('apiKey').addEventListener('input',function(){sessionStorage.setItem('yomel_groq_key',this.value);});
+const savedKey=sessionStorage.getItem('yomel_groq_key');
+if(savedKey) document.getElementById('apiKey').value=savedKey;
 </script>
 </body>
 </html>
+
