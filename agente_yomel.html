@@ -407,7 +407,7 @@ async function fetchOTs() {
 }
 
 // Recorta CSV pero preserva encabezado + más filas (límite mayor)
-function trimCsv(csv, maxChars=6000) {
+function trimCsv(csv, maxChars=2500) {
   if(!csv||csv.trim().length===0) return '(sin datos)';
   if(csv.length<=maxChars) return csv;
   const lines=csv.split('\n');
@@ -421,7 +421,7 @@ function trimCsv(csv, maxChars=6000) {
 }
 
 // ── Groq ─────────────────────────────────────────────
-async function callGroq(messages, maxTokens=1800) {
+async function callGroq(messages, maxTokens=1200) {
   const key=getKey();
   if(!key) throw new Error('Ingresá tu GROQ API Key en el campo de arriba a la derecha.');
   const resp=await fetch(GROQ_URL,{
@@ -447,17 +447,17 @@ Seleccioná entre 2 y 4 hojas como máximo. No agregues explicaciones, solo el J
   if(!match) throw new Error('No se pudieron identificar las hojas relevantes.');
   let sheets;
   try { sheets=JSON.parse(match[0]); } catch { throw new Error('Respuesta de selección inválida.'); }
-  return sheets.filter(s=>typeof s==='string'&&s.trim().length>0).slice(0,4);
+  return sheets.filter(s=>typeof s==='string'&&s.trim().length>0).slice(0,2);
 }
 
 async function answerWithData(query, sheetsData, otsData, failedSheets) {
   const sheetBlocks = sheetsData.length > 0
-    ? sheetsData.map(s => `=== FICHA: ${s.name} ===\n${trimCsv(s.csv, 5000)}`).join('\n\n')
+    ? sheetsData.map(s => `=== FICHA: ${s.name} ===\n${trimCsv(s.csv, 2500)}`).join('\n\n')
     : 'ADVERTENCIA: No se pudieron cargar fichas técnicas.';
 
   const otsBlock = otsData.startsWith('Error') || otsData === '(no se pudo cargar)'
     ? `ADVERTENCIA: ${otsData}`
-    : trimCsv(otsData, 4000);
+    : trimCsv(otsData, 1500);
 
   const failNote = failedSheets.length > 0
     ? `\nNOTA: Las siguientes hojas no se pudieron cargar: ${failedSheets.join(', ')}.`
