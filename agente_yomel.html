@@ -28,7 +28,6 @@
       --shadow:     0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: var(--sans);
       background: var(--bg);
@@ -38,8 +37,6 @@
       grid-template-rows: auto 1fr auto;
       overflow: hidden;
     }
-
-    /* ── HEADER ──────────────────────────────────────── */
     header {
       background: var(--accent);
       padding: 0 20px;
@@ -62,61 +59,35 @@
       flex-shrink: 0;
       border: 1px solid rgba(255,255,255,.25);
     }
-    .header-title {
-      font-size: 16px; font-weight: 600;
-      letter-spacing: .01em;
-      color: #fff;
-    }
-    .header-sub {
-      font-size: 11.5px;
-      color: rgba(255,255,255,.7);
-      font-family: var(--mono);
-      margin-top: 1px;
-    }
-    .header-right {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .header-title { font-size: 16px; font-weight: 600; letter-spacing: .01em; color: #fff; }
+    .header-sub { font-size: 11.5px; color: rgba(255,255,255,.7); font-family: var(--mono); margin-top: 1px; }
+    .header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
     .api-input-wrap {
-      display: flex;
-      align-items: center;
-      gap: 7px;
+      display: flex; align-items: center; gap: 7px;
       background: rgba(0,0,0,.2);
       border: 1px solid rgba(255,255,255,.2);
       border-radius: 8px;
       padding: 5px 12px;
     }
-    .api-input-wrap label {
-      font-family: var(--mono);
-      font-size: 10.5px;
-      color: rgba(255,255,255,.65);
-      white-space: nowrap;
-      font-weight: 500;
-    }
-    #apiKey {
-      background: none;
-      border: none;
-      outline: none;
-      color: rgba(255,255,255,.9);
-      font-family: var(--mono);
-      font-size: 12px;
-      width: 170px;
-    }
+    .api-input-wrap label { font-family: var(--mono); font-size: 10.5px; color: rgba(255,255,255,.65); white-space: nowrap; font-weight: 500; }
+    #apiKey { background: none; border: none; outline: none; color: rgba(255,255,255,.9); font-family: var(--mono); font-size: 12px; width: 170px; }
     #apiKey::placeholder { color: rgba(255,255,255,.4); }
-    .status-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.3);
-      transition: background .3s;
+    .btn-diag {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 7px;
+      color: rgba(255,255,255,.85);
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 5px 11px;
+      cursor: pointer;
+      transition: background .15s;
+      white-space: nowrap;
     }
-    .status-dot.live {
-      background: #4ade80;
-      box-shadow: 0 0 6px #4ade80;
-    }
+    .btn-diag:hover { background: rgba(255,255,255,.25); }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.3); transition: background .3s; }
+    .status-dot.live { background: #4ade80; box-shadow: 0 0 6px #4ade80; }
 
-    /* ── CHAT ────────────────────────────────────────── */
     #chat {
       overflow-y: auto;
       padding: 24px 20px;
@@ -129,189 +100,63 @@
     #chat::-webkit-scrollbar-track { background: transparent; }
     #chat::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
 
-    .msg {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      max-width: 840px;
-      animation: fadeUp .22s ease;
-    }
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(8px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
+    .msg { display: flex; flex-direction: column; gap: 5px; max-width: 860px; animation: fadeUp .22s ease; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
     .msg.user  { align-self: flex-end;  align-items: flex-end; }
     .msg.agent { align-self: flex-start; align-items: flex-start; }
-
-    .msg-label {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--text3);
-      letter-spacing: .05em;
-      text-transform: uppercase;
-      padding: 0 4px;
-      font-weight: 500;
-    }
-    .msg-bubble {
-      padding: 14px 18px;
-      border-radius: var(--radius);
-      font-size: 15px;
-      line-height: 1.7;
-      max-width: 100%;
-      box-shadow: var(--shadow);
-    }
-    .msg.user .msg-bubble {
-      background: var(--accent);
-      color: #fff;
-      font-weight: 500;
-      border-bottom-right-radius: 3px;
-    }
-    .msg.agent .msg-bubble {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-bottom-left-radius: 3px;
-      white-space: pre-wrap;
-    }
-    .msg-meta {
-      display: flex;
-      gap: 5px;
-      flex-wrap: wrap;
-      padding: 0 2px;
-    }
-    .tag {
-      font-family: var(--mono);
-      font-size: 10.5px;
-      padding: 2px 8px;
-      border-radius: 5px;
-      font-weight: 500;
-    }
+    .msg-label { font-family: var(--mono); font-size: 11px; color: var(--text3); letter-spacing: .05em; text-transform: uppercase; padding: 0 4px; font-weight: 500; }
+    .msg-bubble { padding: 14px 18px; border-radius: var(--radius); font-size: 15px; line-height: 1.75; max-width: 100%; box-shadow: var(--shadow); }
+    .msg.user .msg-bubble { background: var(--accent); color: #fff; font-weight: 500; border-bottom-right-radius: 3px; }
+    .msg.agent .msg-bubble { background: var(--surface); border: 1px solid var(--border); color: var(--text); border-bottom-left-radius: 3px; white-space: pre-wrap; }
+    .msg-meta { display: flex; gap: 5px; flex-wrap: wrap; padding: 0 2px; }
+    .tag { font-family: var(--mono); font-size: 10.5px; padding: 2px 8px; border-radius: 5px; font-weight: 500; }
     .tag.ot  { color: var(--blue);  background: var(--blue-bg);  border: 1px solid #bfdbfe; }
     .tag.kb  { color: var(--green); background: var(--green-bg); border: 1px solid #bbf7d0; }
     .tag.err { color: var(--accent); background: var(--accent-bg); border: 1px solid #fecaca; }
+    .tag.warn { color: #92400e; background: #fefce8; border: 1px solid #fde68a; }
 
-    /* Loading */
-    .msg.loading .msg-bubble {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: var(--text2);
-      font-size: 14px;
-      font-family: var(--mono);
-    }
-    .spinner {
-      width: 16px; height: 16px;
-      border: 2.5px solid var(--border2);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-      flex-shrink: 0;
-    }
+    .msg.loading .msg-bubble { background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; gap: 12px; color: var(--text2); font-size: 14px; font-family: var(--mono); }
+    .spinner { width: 16px; height: 16px; border: 2.5px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Welcome */
-    .welcome {
-      text-align: center;
-      padding: 44px 20px;
-      color: var(--text3);
-    }
-    .welcome-icon {
-      width: 52px; height: 52px;
-      background: var(--accent);
-      border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 16px;
-      box-shadow: 0 4px 14px rgba(232,35,26,.3);
-    }
-    .welcome-icon svg { width: 26px; height: 26px; fill: #fff; }
-    .welcome h2 {
-      font-size: 22px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-    .welcome p {
-      font-size: 15px;
-      line-height: 1.7;
-      max-width: 460px;
-      margin: 0 auto 28px;
-      color: var(--text2);
-    }
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 680px; margin: 0 auto; }
-    .chip {
+    /* Panel de diagnóstico */
+    .diag-panel {
       background: var(--surface);
       border: 1.5px solid var(--border);
-      border-radius: 20px;
-      padding: 8px 16px;
-      font-size: 13.5px;
-      color: var(--text2);
-      cursor: pointer;
-      transition: border-color .15s, color .15s, background .15s;
-      font-weight: 500;
-      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      align-self: flex-start;
+      max-width: 680px;
+      width: 100%;
     }
-    .chip:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: var(--accent-bg);
-    }
+    .diag-panel h3 { font-size: 13px; font-weight: 600; margin-bottom: 12px; color: var(--text2); font-family: var(--mono); letter-spacing: .03em; }
+    .diag-row { display: flex; align-items: center; gap: 8px; font-size: 12.5px; padding: 4px 0; border-bottom: 1px solid var(--border); }
+    .diag-row:last-child { border-bottom: none; }
+    .diag-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .diag-dot.ok { background: #4ade80; }
+    .diag-dot.fail { background: var(--accent); }
+    .diag-dot.pending { background: var(--border2); }
+    .diag-name { font-family: var(--mono); font-size: 11.5px; color: var(--text2); flex: 1; }
+    .diag-status { font-size: 11px; color: var(--text3); }
 
-    /* ── INPUT BAR ───────────────────────────────────── */
-    .input-bar {
-      background: var(--surface);
-      border-top: 1.5px solid var(--border);
-      padding: 14px 20px;
-      display: flex;
-      gap: 10px;
-      align-items: flex-end;
-      box-shadow: 0 -2px 8px rgba(0,0,0,.05);
-    }
-    #queryInput {
-      flex: 1;
-      background: var(--surface2);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      color: var(--text);
-      font-family: var(--sans);
-      font-size: 15px;
-      padding: 11px 16px;
-      resize: none;
-      outline: none;
-      line-height: 1.55;
-      max-height: 130px;
-      min-height: 46px;
-      transition: border-color .15s, box-shadow .15s;
-    }
-    #queryInput:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(232,35,26,.1);
-      background: var(--surface);
-    }
+    .welcome { text-align: center; padding: 44px 20px; color: var(--text3); }
+    .welcome-icon { width: 52px; height: 52px; background: var(--accent); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 4px 14px rgba(232,35,26,.3); }
+    .welcome-icon svg { width: 26px; height: 26px; fill: #fff; }
+    .welcome h2 { font-size: 22px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .welcome p { font-size: 15px; line-height: 1.7; max-width: 460px; margin: 0 auto 28px; color: var(--text2); }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 680px; margin: 0 auto; }
+    .chip { background: var(--surface); border: 1.5px solid var(--border); border-radius: 20px; padding: 8px 16px; font-size: 13.5px; color: var(--text2); cursor: pointer; transition: border-color .15s, color .15s, background .15s; font-weight: 500; box-shadow: var(--shadow); }
+    .chip:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+
+    .input-bar { background: var(--surface); border-top: 1.5px solid var(--border); padding: 14px 20px; display: flex; gap: 10px; align-items: flex-end; box-shadow: 0 -2px 8px rgba(0,0,0,.05); }
+    #queryInput { flex: 1; background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: var(--sans); font-size: 15px; padding: 11px 16px; resize: none; outline: none; line-height: 1.55; max-height: 130px; min-height: 46px; transition: border-color .15s, box-shadow .15s; }
+    #queryInput:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,35,26,.1); background: var(--surface); }
     #queryInput::placeholder { color: var(--text3); }
-    #sendBtn {
-      background: var(--accent);
-      border: none;
-      border-radius: var(--radius);
-      width: 46px; height: 46px;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background .15s, transform .1s, box-shadow .15s;
-      flex-shrink: 0;
-      box-shadow: 0 2px 8px rgba(232,35,26,.3);
-    }
+    #sendBtn { background: var(--accent); border: none; border-radius: var(--radius); width: 46px; height: 46px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s, transform .1s, box-shadow .15s; flex-shrink: 0; box-shadow: 0 2px 8px rgba(232,35,26,.3); }
     #sendBtn:hover { background: var(--accent2); box-shadow: 0 4px 12px rgba(232,35,26,.4); }
     #sendBtn:active { transform: scale(.95); }
     #sendBtn:disabled { background: var(--border2); cursor: not-allowed; box-shadow: none; }
     #sendBtn svg { width: 19px; height: 19px; fill: #fff; }
-    .input-hint {
-      font-size: 11.5px;
-      color: var(--text3);
-      font-family: var(--mono);
-      white-space: nowrap;
-      padding-bottom: 14px;
-    }
   </style>
 </head>
 <body>
@@ -323,6 +168,7 @@
     <div class="header-sub">OTs + Base de Conocimiento · LLaMA 3.3 70B</div>
   </div>
   <div class="header-right">
+    <button class="btn-diag" onclick="runDiagnostic()" title="Verificar conexión con las fuentes de datos">🔍 Diagnóstico</button>
     <div class="api-input-wrap">
       <label>GROQ KEY</label>
       <input id="apiKey" type="password" placeholder="gsk_..." autocomplete="off" />
@@ -364,6 +210,14 @@ const SPREADSHEET_ID  = '198HMkr1g50V5r7vDB6Z5uwmdS5Z6UzN52YCY9oAlqV0';
 const OTS_CSV_URL     = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVcyVNJzmu8UBR5yXccxxbbqPKaQPKIrWbLMFhmlzp9RwTIxBPBSeKTVXxiRYGIzyPy5wX9RHqbXhd/pub?output=csv';
 const GROQ_MODEL      = 'llama-3.3-70b-versatile';
 const GROQ_URL        = 'https://api.groq.com/openai/v1/chat/completions';
+
+// Hojas para diagnóstico rápido (una por familia)
+const DIAG_SHEETS = [
+  'MM_Ficha_Tecnica',
+  'YO_F1_01_Indice_Modelos',
+  'YO_F5_FERT_RD28',
+  'YO_DELTA6150_FichaTecnica'
+];
 
 const SHEET_CATALOG = `
 MASCAR MAGNA (rotoempacadora de cámara fija):
@@ -498,11 +352,14 @@ YOMEL — Fertilizadoras FA 1.18 / FP 1.18:
   YO_FA-FP118_Regulacion → regulación y cálculo de dosis
 `.trim();
 
+// ── Utilidades ──────────────────────────────────────
 function getKey() { return document.getElementById('apiKey').value.trim(); }
 function autoResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,130)+'px'; }
 function handleKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();handleSend();} }
 function useChip(el) { document.getElementById('queryInput').value=el.textContent; autoResize(document.getElementById('queryInput')); handleSend(); }
 function scrollChat() { const c=document.getElementById('chat'); c.scrollTop=c.scrollHeight; }
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function setDot(live) { document.getElementById('statusDot').className='status-dot'+(live?' live':''); }
 
 function appendMsg(role, content, tags=[]) {
   const welcome=document.getElementById('welcome'); if(welcome) welcome.remove();
@@ -512,7 +369,7 @@ function appendMsg(role, content, tags=[]) {
   div.innerHTML=`
     <div class="msg-label">${label}</div>
     <div class="msg-bubble">${escHtml(content)}</div>
-    ${tags.length?`<div class="msg-meta">${tags.map(t=>`<span class="tag ${t.cls}">${t.text}</span>`).join('')}</div>`:''}
+    ${tags.length?`<div class="msg-meta">${tags.map(t=>`<span class="tag ${t.cls}">${escHtml(t.text)}</span>`).join('')}</div>`:''}
   `;
   chat.appendChild(div); scrollChat(); return div;
 }
@@ -524,58 +381,171 @@ function appendLoading(text) {
   div.innerHTML=`<div class="msg-label">Agente IA</div><div class="msg-bubble"><div class="spinner"></div><span id="loadingText">${escHtml(text)}</span></div>`;
   chat.appendChild(div); scrollChat(); return div;
 }
-
 function setLoadingText(el,text) { const s=el.querySelector('#loadingText'); if(s) s.textContent=text; }
-function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function setDot(live) { document.getElementById('statusDot').className='status-dot'+(live?' live':''); }
 
+// ── Fetch de datos ───────────────────────────────────
 async function fetchSheet(sheetName) {
   const url=`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
-  const resp=await fetch(url);
-  if(!resp.ok) throw new Error(`HTTP ${resp.status} para hoja "${sheetName}"`);
+  const resp=await fetch(url,{cache:'no-store'});
+  if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
   const text=await resp.text();
-  if(text.trim().startsWith('<!DOCTYPE')) throw new Error(`Hoja "${sheetName}" no encontrada`);
+  // Detectar página de login o error de Google
+  if(text.trim().startsWith('<!DOCTYPE')||text.trim().startsWith('<html')) {
+    throw new Error('Hoja no accesible — verificá que la planilla esté compartida públicamente');
+  }
+  // Detectar hoja vacía o mensaje de error de gviz
+  if(text.trim().length < 10) throw new Error('Hoja vacía o no encontrada');
   return text;
 }
 
 async function fetchOTs() {
-  const resp=await fetch(OTS_CSV_URL);
-  if(!resp.ok) throw new Error(`HTTP ${resp.status} en OTs`);
-  return await resp.text();
+  const resp=await fetch(OTS_CSV_URL,{cache:'no-store'});
+  if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
+  const text=await resp.text();
+  if(text.trim().startsWith('<!DOCTYPE')||text.trim().startsWith('<html')) {
+    throw new Error('URL de OTs no accesible');
+  }
+  return text;
 }
 
-function trimCsv(csv,maxChars=3000) {
+// Recorta CSV pero preserva encabezado + más filas (límite mayor)
+function trimCsv(csv, maxChars=6000) {
+  if(!csv||csv.trim().length===0) return '(sin datos)';
   if(csv.length<=maxChars) return csv;
-  const lines=csv.split('\n'); let result=lines[0]+'\n'; let i=1;
-  while(i<lines.length&&result.length+lines[i].length<maxChars){result+=lines[i]+'\n';i++;}
-  if(i<lines.length) result+=`… (${lines.length-i} filas más omitidas)`;
+  const lines=csv.split('\n');
+  let result=lines[0]+'\n'; // encabezado siempre incluido
+  let i=1;
+  while(i<lines.length && result.length+lines[i].length < maxChars) {
+    result+=lines[i]+'\n'; i++;
+  }
+  if(i<lines.length) result+=`\n… (${lines.length-i} filas más omitidas por límite de contexto)`;
   return result;
 }
 
-async function callGroq(messages,maxTokens=1500) {
+// ── Groq ─────────────────────────────────────────────
+async function callGroq(messages, maxTokens=1800) {
   const key=getKey();
   if(!key) throw new Error('Ingresá tu GROQ API Key en el campo de arriba a la derecha.');
-  const resp=await fetch(GROQ_URL,{method:'POST',headers:{'Authorization':`Bearer ${key}`,'Content-Type':'application/json'},body:JSON.stringify({model:GROQ_MODEL,messages,max_tokens:maxTokens,temperature:0.1})});
+  const resp=await fetch(GROQ_URL,{
+    method:'POST',
+    headers:{'Authorization':`Bearer ${key}`,'Content-Type':'application/json'},
+    body:JSON.stringify({model:GROQ_MODEL,messages,max_tokens:maxTokens,temperature:0.1})
+  });
   if(!resp.ok){const err=await resp.json().catch(()=>({}));throw new Error(err?.error?.message||`Error Groq HTTP ${resp.status}`);}
   const data=await resp.json();
   return data.choices?.[0]?.message?.content??'';
 }
 
 async function selectRelevantSheets(query) {
-  const messages=[{role:'system',content:`Sos un selector de documentación técnica de maquinaria agrícola. Elegí las hojas más relevantes para responder la consulta. RESPONDÉ ÚNICAMENTE con un JSON array de strings con los nombres exactos de las hojas. Seleccioná entre 2 y 4 hojas como máximo.`},{role:'user',content:`Consulta: "${query}"\n\nCatálogo:\n${SHEET_CATALOG}\n\nRespondé SOLO con JSON array.`}];
-  const raw=await callGroq(messages,300);
+  const messages=[
+    {role:'system',content:`Sos un selector de documentación técnica de maquinaria agrícola Yomel/Mascar. 
+Tu tarea: elegir las hojas de datos más relevantes para responder la consulta del técnico.
+RESPONDÉ ÚNICAMENTE con un JSON array de strings con los nombres EXACTOS de las hojas (tal como aparecen en el catálogo).
+Seleccioná entre 2 y 4 hojas como máximo. No agregues explicaciones, solo el JSON array.`},
+    {role:'user',content:`Consulta del técnico: "${query}"\n\nCatálogo de hojas disponibles:\n${SHEET_CATALOG}\n\nRespondé SOLO con JSON array. Ejemplo: ["MM_Ficha_Tecnica","MM_Mantenimiento"]`}
+  ];
+  const raw=await callGroq(messages,400);
   const match=raw.match(/\[[\s\S]*?\]/);
-  if(!match) throw new Error('No se pudo identificar las hojas relevantes.');
-  let sheets; try{sheets=JSON.parse(match[0]);}catch{throw new Error('Respuesta inválida.');}
+  if(!match) throw new Error('No se pudieron identificar las hojas relevantes.');
+  let sheets;
+  try { sheets=JSON.parse(match[0]); } catch { throw new Error('Respuesta de selección inválida.'); }
   return sheets.filter(s=>typeof s==='string'&&s.trim().length>0).slice(0,4);
 }
 
-async function answerWithData(query,sheetsData,otsData) {
-  const sheetBlocks=sheetsData.map(s=>`=== ${s.name} ===\n${trimCsv(s.csv,2500)}`).join('\n\n');
-  const messages=[{role:'system',content:`Sos el asistente técnico oficial de Yomel S.A., empresa argentina de maquinaria agrícola con sede en 9 de Julio, Buenos Aires. Tenés acceso a la base de conocimiento técnico completa y al historial de órdenes de trabajo (OTs).\n\nPautas:\n- Respondé en español rioplatense, técnico y preciso\n- Citá datos concretos: torques en Nm, intervalos, lubricantes, códigos de error\n- Mencioná de qué hoja proviene la información\n- Si hay OTs relacionadas, mencionalo\n- Usá listas para pasos y valores`},{role:'user',content:`CONSULTA: ${query}\n\n━━━ FICHAS TÉCNICAS ━━━\n${sheetBlocks||'(ninguna)'}\n\n━━━ HISTORIAL OTs ━━━\n${trimCsv(otsData,2500)}`}];
-  return callGroq(messages,1500);
+async function answerWithData(query, sheetsData, otsData, failedSheets) {
+  const sheetBlocks = sheetsData.length > 0
+    ? sheetsData.map(s => `=== FICHA: ${s.name} ===\n${trimCsv(s.csv, 5000)}`).join('\n\n')
+    : 'ADVERTENCIA: No se pudieron cargar fichas técnicas.';
+
+  const otsBlock = otsData.startsWith('Error') || otsData === '(no se pudo cargar)'
+    ? `ADVERTENCIA: ${otsData}`
+    : trimCsv(otsData, 4000);
+
+  const failNote = failedSheets.length > 0
+    ? `\nNOTA: Las siguientes hojas no se pudieron cargar: ${failedSheets.join(', ')}.`
+    : '';
+
+  const messages=[
+    {role:'system',content:`Sos el asistente técnico oficial de Yomel S.A., empresa argentina de maquinaria agrícola con sede en 9 de Julio, Buenos Aires.
+Tenés acceso a fichas técnicas reales y al historial de órdenes de trabajo (OTs).
+
+REGLAS IMPORTANTES:
+- Respondé SOLO con información que esté presente en los datos que te proveen a continuación
+- Si los datos de una ficha no contienen la información pedida, decilo claramente
+- Si las fichas no se cargaron, indicalo y ofrecé ayuda general
+- Si el historial de OTs tiene datos relevantes, citá el número de OT
+- Usá español rioplatense, técnico y preciso
+- Citá siempre de qué hoja proviene cada dato (ej: "según MM_Torques_Ajustes...")
+- Usá listas para pasos, torques y valores concretos${failNote}`},
+    {role:'user',content:`CONSULTA DEL TÉCNICO: ${query}
+
+━━━ FICHAS TÉCNICAS CARGADAS ━━━
+${sheetBlocks}
+
+━━━ HISTORIAL DE OTs ━━━
+${otsBlock}`}
+  ];
+  return callGroq(messages, 1800);
 }
 
+// ── Diagnóstico ──────────────────────────────────────
+async function runDiagnostic() {
+  const welcome=document.getElementById('welcome'); if(welcome) welcome.remove();
+  const chat=document.getElementById('chat');
+
+  const panel=document.createElement('div');
+  panel.className='msg agent';
+  panel.innerHTML=`
+    <div class="msg-label">Diagnóstico de conexión</div>
+    <div class="diag-panel">
+      <h3>🔍 VERIFICANDO FUENTES DE DATOS…</h3>
+      <div id="diagRows"></div>
+    </div>
+  `;
+  chat.appendChild(panel); scrollChat();
+
+  const rowsEl=panel.querySelector('#diagRows');
+  const sources=[
+    {label:'OTs (Google Sheets publicado)', type:'ots'},
+    ...DIAG_SHEETS.map(s=>({label:s, type:'sheet', name:s}))
+  ];
+
+  for(const src of sources){
+    const row=document.createElement('div');
+    row.className='diag-row';
+    row.innerHTML=`<div class="diag-dot pending"></div><div class="diag-name">${escHtml(src.label)}</div><div class="diag-status">Verificando…</div>`;
+    rowsEl.appendChild(row); scrollChat();
+
+    try {
+      let text;
+      if(src.type==='ots') text=await fetchOTs();
+      else text=await fetchSheet(src.name);
+
+      const lines=text.trim().split('\n').length;
+      row.querySelector('.diag-dot').className='diag-dot ok';
+      row.querySelector('.diag-status').textContent=`✓ OK — ${lines} filas`;
+      row.querySelector('.diag-status').style.color='var(--green)';
+    } catch(err) {
+      row.querySelector('.diag-dot').className='diag-dot fail';
+      row.querySelector('.diag-status').textContent=`✗ ${err.message}`;
+      row.querySelector('.diag-status').style.color='var(--accent)';
+    }
+  }
+
+  // Conclusión
+  const failCount=rowsEl.querySelectorAll('.diag-dot.fail').length;
+  const conclusion=document.createElement('div');
+  conclusion.style.cssText='margin-top:12px;font-size:13px;line-height:1.6;color:var(--text2);';
+  if(failCount===0){
+    conclusion.innerHTML='<strong style="color:var(--green)">✓ Todo conectado correctamente.</strong>';
+  } else {
+    conclusion.innerHTML=`<strong style="color:var(--accent)">⚠ ${failCount} fuente(s) con error.</strong><br>
+Solución: Abrí la planilla de fichas técnicas en Google Sheets → Archivo → Compartir → <strong>"Cualquier persona con el enlace puede ver"</strong> y actualizá la página.`;
+  }
+  rowsEl.appendChild(conclusion); scrollChat();
+}
+
+// ── Flujo principal ──────────────────────────────────
 let isProcessing=false;
 
 async function handleSend() {
@@ -583,39 +553,59 @@ async function handleSend() {
   const input=document.getElementById('queryInput');
   const query=input.value.trim(); if(!query) return;
   const key=getKey();
-  if(!key){appendMsg('agent','⚠ Por favor ingresá tu Groq API Key en el campo de arriba a la derecha.',[{cls:'err',text:'sin API key'}]);return;}
-  isProcessing=true; document.getElementById('sendBtn').disabled=true;
+  if(!key){
+    appendMsg('agent','⚠ Por favor ingresá tu Groq API Key en el campo de arriba a la derecha.',[{cls:'err',text:'sin API key'}]);
+    return;
+  }
+  isProcessing=true;
+  document.getElementById('sendBtn').disabled=true;
   input.value=''; input.style.height='auto'; setDot(false);
   appendMsg('user',query);
   const loadEl=appendLoading('Identificando documentos relevantes…');
+
   try {
     const selectedSheets=await selectRelevantSheets(query);
-    setLoadingText(loadEl,`Consultando ${selectedSheets.length} ficha(s) técnica(s)…`);
-    const [sheetsResults,otsRaw]=await Promise.all([
-      Promise.allSettled(selectedSheets.map(async name=>({name,csv:await fetchSheet(name)}))),
-      fetchOTs().catch(()=>'(no se pudo cargar el historial de OTs)')
+    setLoadingText(loadEl,`Consultando ${selectedSheets.length} ficha(s) técnica(s) y OTs…`);
+
+    const [sheetsResults, otsRaw]=await Promise.all([
+      Promise.allSettled(selectedSheets.map(async name=>({name, csv:await fetchSheet(name)}))),
+      fetchOTs().catch(e=>`Error al cargar OTs: ${e.message}`)
     ]);
-    const sheetsData=sheetsResults.filter(r=>r.status==='fulfilled').map(r=>r.value);
-    const failedSheets=sheetsResults.filter(r=>r.status==='rejected').map((r,i)=>selectedSheets[i]);
-    setLoadingText(loadEl,'Procesando respuesta con IA…');
-    const answer=await answerWithData(query,sheetsData,otsRaw);
+
+    const sheetsData=sheetsResults
+      .filter(r=>r.status==='fulfilled')
+      .map(r=>r.value);
+    const failedSheets=sheetsResults
+      .filter(r=>r.status==='rejected')
+      .map((_,i)=>selectedSheets[i]);
+
+    setLoadingText(loadEl,'Generando respuesta…');
+    const answer=await answerWithData(query, sheetsData, otsRaw, failedSheets);
     loadEl.remove();
+
     const tags=[{cls:'ot',text:'📋 OTs'}];
     sheetsData.forEach(s=>tags.push({cls:'kb',text:`📄 ${s.name}`}));
     if(failedSheets.length) failedSheets.forEach(n=>tags.push({cls:'err',text:`✗ ${n}`}));
-    appendMsg('agent',answer,tags); setDot(true);
+
+    appendMsg('agent',answer,tags);
+    setDot(true);
   } catch(err) {
     loadEl.remove();
     appendMsg('agent',`Error: ${err.message}`,[{cls:'err',text:'error'}]);
     setDot(false);
   } finally {
-    isProcessing=false; document.getElementById('sendBtn').disabled=false;
+    isProcessing=false;
+    document.getElementById('sendBtn').disabled=false;
   }
 }
 
-document.getElementById('apiKey').addEventListener('input',function(){sessionStorage.setItem('yomel_groq_key',this.value);});
+// Persistir API key en sesión
+document.getElementById('apiKey').addEventListener('input',function(){
+  sessionStorage.setItem('yomel_groq_key',this.value);
+});
 const savedKey=sessionStorage.getItem('yomel_groq_key');
 if(savedKey) document.getElementById('apiKey').value=savedKey;
 </script>
 </body>
 </html>
+
