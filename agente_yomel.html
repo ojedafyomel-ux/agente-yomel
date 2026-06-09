@@ -213,111 +213,180 @@ const GROQ_URL        = 'https://api.groq.com/openai/v1/chat/completions';
 
 // Hojas para diagnóstico rápido (una por familia)
 const DIAG_SHEETS = [
-  'MASCAR MAGNA',
-  'Delta 6150',
-  'Impala 5000',
-  'Desmalezadora 1510 BR'
+  'MM_Ficha_Tecnica',
+  'YO_DELTA6150_FichaTecnica',
+  'YO_F9_FICHA_IMPALA',
+  'YO_F1_04_Mantenimiento'
 ];
 
 const SHEET_CATALOG = `
-MASCAR:
-  MASCAR ANDINA → rotoempacadora Andina (modelos 120, 120L, 150, 150L, 180, 180L): ficha técnica, mantenimiento, torques, fallas
-  MASCAR MAGNA → rotoempacadora Magna / Magna CUT: especificaciones, mantenimiento, torques, lubricantes, fallas, códigos de error, sensores
-  MASCAR MISTRAL → rotoempacadora Mistral / Mistral CUT: especificaciones, mantenimiento, torques, engrase, hidráulico, fallas, atado
+MASCAR MAGNA (rotoempacadora de cámara fija):
+  MM_Ficha_Tecnica → especificaciones completas
+  MM_Mantenimiento → plan de mantenimiento preventivo
+  MM_Torques_Ajustes → tabla de torques y ajustes
+  MM_Lubricantes_Consumibles → lubricantes y consumibles
+  MM_Solucion_Problemas → guía de fallas y soluciones
+  MM_Codigos_Error → lista de códigos de error electrónico
+  MM_Sensores → sensores inductivos
+  MM_Senales_Alarmas → señales acústicas y alarmas
+  MM_Procedimientos → procedimientos operativos clave
 
-YOMEL — Desmalezadoras serie LT (modelos 1020–1521):
-  Desmalezadora 1020 - 1021 LT → ficha técnica 1020 LT y 1021 LT
-  Desmalezadora 1320 - 1321 LT → ficha técnica 1320 LT y 1321 LT
-  Desmalezadora 1510 LT → ficha técnica 1510 LT
-  Desmalezadora 1520 - 1521 LT → ficha técnica 1520 LT y 1521 LT
+MASCAR MISTRAL / MISTRAL CUT (rotoempacadora):
+  MISTR_FICHA_TÉCNICA → especificaciones
+  MISTR_MANTENIMIENTO → mantenimiento periódico
+  MISTR_TORQUES_AJUSTES → torques y presiones
+  MISTR_ENGRASE_LUBRICACIÓN → puntos de engrase y lubricantes
+  MISTR_HIDRÁULICO_ELÉCTRICO → instalaciones hidráulica y eléctrica
+  MISTR_FALLAS_CAUSAS_REMEDIOS → diagnóstico de fallas
+  MISTR_SENSORES_DIAGNÓSTICO → sensores y electrónica
+  MISTR_ATADO_CONFIGURACIÓN → sistema de atado
+  MISTR_ALTURAS_TIMÓN → tabla de alturas del timón
 
-YOMEL — Desmalezadoras serie BR (modelos 1320–2221):
-  Desmalezadora 1320 - 1321 BR → ficha técnica 1320 BR y 1321 BR
-  Desmalezadora 1510 BR → ficha técnica 1510 BR
-  Desmalezadora 1520 - 1550 BR → ficha técnica 1520 BR y 1550 BR
-  Desmalezadora 1521 - 1551 BR → ficha técnica 1521 BR y 1551 BR
-  Desmalezadora 1810 BR → ficha técnica 1810 BR
-  Desmalezadora 1820 - 1850 BR → ficha técnica 1820 BR y 1850 BR
-  Desmalezadora 1821 - 1851 BR → ficha técnica 1821 BR y 1851 BR
-  Desmalezadora 2010 BR → ficha técnica 2010 BR
-  Desmalezadora 2020 - 2021 BR → ficha técnica 2020 BR y 2021 BR
-  Desmalezadora 2210 BR → ficha técnica 2210 BR
-  Desmalezadora 2220 - 2221 BR → ficha técnica 2220 BR y 2221 BR
+MASCAR ANDINA (rotoempacadora):
+  ANDINA_Ficha_Técnica → especificaciones (modelos 120, 120L, 150, 150L, 180, 180L)
+  ANDINA_Mantenimiento → plan de mantenimiento
+  ANDINA_Torques_Ajustes → torques y ajustes críticos
+  ANDINA_Fluidos_Presiones → fluidos, lubricantes y presiones
+  ANDINA_Fallas_Remedios → diagnóstico de fallas
 
-YOMEL — Desmalezadoras serie BRL:
-  Desmalezadora 1510 BRL → ficha técnica 1510 BRL
-  Desmalezadora 1550 - 1551 BRL → ficha técnica 1550 BRL y 1551 BRL
-  Desmalezadora 1810 BRL → ficha técnica 1810 BRL
-  Desmalezadora 1850 - 1851 BRL → ficha técnica 1850 BRL y 1851 BRL
+YOMEL — Desmalezadoras serie MA / LT / BR (modelos 1020–1851):
+  YO_F1_01_Indice_Modelos → índice de modelos y códigos de manual
+  YO_F1_02_Especificaciones → tabla comparativa de especificaciones por modelo
+  YO_F1_03_Fluidos_Lubricantes → fluidos y lubricantes
+  YO_F1_04_Mantenimiento → plan de mantenimiento
+  YO_F1_05_Ajustes_Criticos → ajustes y regulaciones críticas
+  YO_F1_06_Procedimientos → procedimientos paso a paso
+  YO_F1_07_Troubleshooting → diagnóstico y resolución de fallas
 
-YOMEL — Desmalezadoras articuladas y trituradora:
-  3210 → desmalezadora trituradora 3210CR
-  4310 → desmalezadora articulada 4310V
-  4330 → desmalezadora articulada 4330 / 4330 DM
-  Delta 4630 → desmalezadora Delta 4630
-  Delta 6150 → desmalezadora Delta 6150/540 y 6150/1000: ficha técnica, mantenimiento, procedimientos de campo
-  HM 302 → desmalezadora/hiladora HM 3010 V y HM-302
-  HR7 → rastrillo lateral HR-7
+YOMEL — Desmalezadoras BR 2m y 2.2m (modelos 2010–2221 BR, 3210CR, 4310V):
+  YO_F2_DESMALEZADORAS_BR-2m → ficha técnica serie 2.06m
+  YO_F2_DESMALEZADORAS_BR-2.2 → ficha técnica serie 2.2m
+  YO_F2_DESMALEZADORA_3210CR → ficha técnica 3210CR trituradora
+  YO_F2_DESMALEZADORA_4310V → ficha técnica 4310V articulada
+  YO_F2_ESPECIF_TECNICAS → comparativa de especificaciones
+  YO_F2_LUBRICACION → lubricación todos los modelos
+  YO_F2_MANTENIMIENTO → plan de mantenimiento
+  YO_F2_AJUSTES_REGULACIONES → ajustes y regulaciones
+  YO_F2_EMBRAGUE_TRANSMISION → embrague de fricción y cardán
+  YO_F2_TROUBLESHOOTING → guía de fallas y soluciones
 
-YOMEL — Implementos y esparcidoras:
-  Arados cinceles → arados CIN-5 CF y CIN-7 CF
-  Esparcidoras control → esparcidora bidisco centrifuga CONTROL
-  Esparcidoras ETO → esparcidora péndular ETO 600 y 1050
-  Esparcidoras Flex → esparcidoras FLEX 1050A y 1050P
+YOMEL — Implementos: arados y esparcidoras (CONTROL/ETO/FLEX):
+  YO_F3_ARADOS CINCELES → arados CIN-5 CF / CIN-7 CF
+  YO_F3_ESPARCIDORAS CONTROL → esparcidora bidisco centrifuga CONTROL
+  YO_F3_ESPARCIDORAS ETO → esparcidora péndular ETO 600 / 1050
+  YO_F3_ESPARCIDORAS FLEX → esparcidoras FLEX 1050A / 1050P
+  YO_F3_TORQUES Y AJUSTES → torques y ajustes todas las familias F3
+  YO_F3_MANTENIMIENTO → mantenimiento preventivo
+  YO_F3_TABLAS DE DOSIFICACIÓN → tablas de dosificación kg/ha
+  YO_F3_RESOLUCIÓN DE FALLAS → guía de fallas para campo
 
-YOMEL — Fertilizadoras RD/RDP:
-  RDP - RD 1428Z → fertilizadora RDP/RD 1428Z
-  RDP - RD 2028Z → fertilizadora RDP/RD 2028Z
-  RDP - RD 3028Z → fertilizadora RDP/RD 3028Z
-  RSP 360 → abonadora RSP 360 SL/CN/2C/SCR
-  RDP - RDA 600 → fertilizadora RDP/RDA 600
-  RDP - RDA 1050 → fertilizadora RDP/RDA 1050
-  FA – FP 1.18 → fertilizadoras FA 1.18 (arrastre) y FP 1.18 (3 puntos)
-  Control 24 metros → fertilizadora Control 24m (1424/2024/3024)
+YOMEL — Desmalezadoras/Hileradoras HM y Rastrillos HR:
+  YO_F4_HM_Desmalezadoras → ficha técnica HM 3010 V, HM-302
+  YO_F4_HR_Rastrillos → ficha técnica HR-7 rastrillo lateral
+  YO_F4_LUBRICACION → tabla maestra de lubricación
+  YO_F4_AJUSTES_CRITICOS → ajustes y regulaciones de campo
+  YO_F4_MANTENIMIENTO → checklists de mantenimiento
+  YO_F4_TROUBLESHOOTING → diagnóstico de fallas
 
-YOMEL — Fertilizadoras Impala:
-  Impala 3500 → fertilizadora Impala 3500 lts
-  Impala 5000 → fertilizadora Impala 5000 lts
-  Impala 6000 → fertilizadora Impala 6000 lts
-  Impala 8000 → fertilizadora Impala 8000 lts
-  Impala 10000 → fertilizadora Impala 10000 lts
-  Impala Orgánica 4000 - 8000 → fertilizadora Impala Orgánica 4000 y 8000 lts
+YOMEL — Fertilizadoras bidisco RD 2.8m / RD 3.6m / RSP 360:
+  YO_F5_FERT_RD28 → ficha técnica serie RD/RDP 2.8m
+  YO_F5_FERT_RD36 → ficha técnica serie RD/RDP 3.6m
+  YO_F5_RSP_360 → abonadoras RSP 360 SL/CN/2C/SCR
+  YO_F5_TORQUES_AJUSTES → torques todos los modelos RD/RSP
+  YO_F5_MANTENIMIENTO → mantenimiento y lubricación
+  YO_F5_TROUBLESHOOTING → diagnóstico de fallas RSP 360
+  YO_F5_TABLAS_DIST → tablas de distribución kg/ha
+  YO_F5_CHASIS_TH1226 → falso chasis y tractoelevador TH1226
 
-YOMEL — Segadoras y acondicionadoras:
-  Moscato 2000 - 2400 → segadoras Moscato 2000 y 2400
-  Moscato 3070 → segadora-acondicionadora Moscato 3070
-  RV 15 → segadora-acondicionadora RV 15
-  HRP 4 - 5 → segadora HRP 4 y HRP 5
-  RPG 380 → segadora RPG 380
-  RVA 9 - 11 → acondicionadora RVA 9 y RVA 11
+YOMEL — Impala Orgánica y Segadoras Moscato:
+  YO_F6_IMPALA_ORGANICA → ficha técnica Impala Orgánica 4000 / 8000
+  YO_F6_MOSCATO_SEGAD → ficha técnica segadoras Moscato 2000 / 2400
+  YO_F6_REF_RAPIDA → referencia rápida valores clave de campo
 
-YOMEL — Sembradoras:
-  APV – SPIN → sembradora neumática APV SPIN
-  Sembradoras APV PS → sembradoras APV PS (PS120–PS500 y PS800)
+YOMEL — Moscato 3070 / RV (segadoras-acondicionadoras):
+  YO_F7_FICHAS_TEC → especificaciones Moscato 3070, RV15
+  YO_F7_LUBRICACION → lubricación Moscato 3070
+  YO_F7_AJUSTES → ajustes y regulaciones
+  YO_F7_MANTENIMIENTO → mantenimiento preventivo
+  YO_F7_ALERTAS_CRIT → alertas y prohibiciones críticas
+
+YOMEL — Fertilizadoras RDP/RD multi-modelo:
+  YO_F8_FICHAS_TEC → fichas de especificaciones múltiples modelos
+  YO_F8_MANTENIMIENTO → plan de mantenimiento
+  YO_F8_AJUSTES_REG → ajustes y parámetros operativos
+  YO_F8_LUB_REF_RAP → lubricación referencia rápida campo
+  YO_F8_DOSIFICACION → tablas de distribución orientativas
+
+YOMEL — Fertilizadoras Impala (3.500 / 5.000 / 6.000 / 8.000 / 10.000 lts):
+  YO_F9_FICHA_IMPALA → ficha técnica completa por modelo
+  YO_F9_TORQUES_AJUST → torques de ajuste
+  YO_F9_MANTENIMIENTO → plan de mantenimiento preventivo
+  YO_F9_LUBRICACION → plan de engrase y lubricación
+  YO_F9_HIDRAULICO → circuito hidráulico
+  YO_F9_CALIB_DOSIS → tablas de dosificación (sistema mecánico)
+  YO_F9_GUILLOTINA_HID → apertura guillotina hidráulica (kg/ha)
+  YO_F9_ANCHOS_TRAB → anchos de trabajo por producto
+  YO_F9_RODAMIENTOS → catálogo de rodamientos y vida útil
+
+YOMEL — Sembradora APV PS 800 / Fertilizadora Control 24m / Delta 4630:
+  YO_SEMBR_NEUMÁTICA → ficha técnica APV PS 800 M1 / HG 450 M1
+  YO_FERTILIZAD_CONTROL → ficha técnica fertilizadora Control 24m (1424/2024/3024)
+  YO_DESMALEZAD_DELTA → ficha técnica desmalezadora Delta 4630
+  YO_TORQUES_AJUSTES → torques fluidos y ajustes referencia rápida
+  YO_TABLAS_SIEMBRA_PS800 → tablas de siembra APV PS 800
+  YO_TABLAS_DIST_CONTROL → tablas distribución urea fertilizadora Control 24m
+
+YOMEL — Desmalezadoras articuladas 4330 / Sembradoras APV:
+  YO_DESMALEZADORAS → ficha técnica desmalezadoras 4330 / 4330 DM
+  YO_SEMBRADORAS_APV_PS → ficha técnica sembradoras APV PS120–PS500
+  YO_TABLAS_SIEMBRA_APV → tablas de siembra APV PS (kg/min)
+
+YOMEL — Desmalezadora DELTA 6150:
+  YO_DELTA6150_FichaTecnica → especificaciones DELTA 6150/540 y 6150/1000
+  YO_DELTA6150_Mantenimiento → plan de mantenimiento
+  YO_DELTA6150_Procedimientos → procedimientos de campo
+
+YOMEL — Fertilizadoras FA 1.18 / FP 1.18:
+  YO_FA-FP118_FichaTecnica → especificaciones FA 1.18 (arrastre) y FP 1.18 (3 puntos)
+  YO_FA-FP118_Mantenimiento → mantenimiento
+  YO_FA-FP118_Regulacion → regulación y cálculo de dosis
 `.trim();
 
 // Lista completa de hojas válidas (nombres exactos de Google Sheets)
 const VALID_SHEETS = [
-  'MASCAR ANDINA','MASCAR MAGNA','MASCAR MISTRAL',
-  'Desmalezadora 1020 - 1021 LT','Desmalezadora 1320 - 1321 LT',
-  'Desmalezadora 1320 - 1321 BR','Desmalezadora 1510 BR',
-  'Desmalezadora 1520 - 1550 BR','Desmalezadora 1521 - 1551 BR',
-  'Desmalezadora 1810 BR','Desmalezadora 1820 - 1850 BR',
-  'Desmalezadora 1821 - 1851 BR','Desmalezadora 1510 BRL',
-  'Desmalezadora 1550 - 1551 BRL','Desmalezadora 1810 BRL',
-  'Desmalezadora 1850 - 1851 BRL','Desmalezadora 1510 LT',
-  'Desmalezadora 1520 - 1521 LT','Desmalezadora 2010 BR',
-  'Desmalezadora 2020 - 2021 BR','Desmalezadora 2210 BR',
-  'Desmalezadora 2220 - 2221 BR','3210','4310',
-  'Arados cinceles','Esparcidoras control','Esparcidoras ETO',
-  'Esparcidoras Flex','HM 302','HR7',
-  'RDP - RD 1428Z','RDP - RD 2028Z','RDP - RD 3028Z','RSP 360',
-  'Impala Orgánica 4000 - 8000','Moscato 2000 - 2400','Moscato 3070',
-  'RV 15','HRP 4 - 5','RPG 380','RVA 9 - 11',
-  'RDP - RDA 600','RDP - RDA 1050',
-  'Impala 3500','Impala 5000','Impala 6000','Impala 8000','Impala 10000',
-  'APV – SPIN','Control 24 metros','Delta 4630','4330',
-  'Delta 6150','FA – FP 1.18','Sembradoras APV PS'
+  'MM_Ficha_Tecnica','MM_Mantenimiento','MM_Torques_Ajustes',
+  'MM_Lubricantes_Consumibles','MM_Solucion_Problemas','MM_Codigos_Error',
+  'MM_Sensores','MM_Senales_Alarmas','MM_Procedimientos',
+  'MISTR_FICHA_TÉCNICA','MISTR_MANTENIMIENTO','MISTR_TORQUES_AJUSTES',
+  'MISTR_ENGRASE_LUBRICACIÓN','MISTR_HIDRÁULICO_ELÉCTRICO',
+  'MISTR_FALLAS_CAUSAS_REMEDIOS','MISTR_SENSORES_DIAGNÓSTICO',
+  'MISTR_ATADO_CONFIGURACIÓN','MISTR_ALTURAS_TIMÓN',
+  'ANDINA_Ficha_Técnica','ANDINA_Mantenimiento','ANDINA_Torques_Ajustes',
+  'ANDINA_Fluidos_Presiones','ANDINA_Fallas_Remedios',
+  'YO_F1_01_Indice_Modelos','YO_F1_02_Especificaciones',
+  'YO_F1_03_Fluidos_Lubricantes','YO_F1_04_Mantenimiento',
+  'YO_F1_05_Ajustes_Criticos','YO_F1_06_Procedimientos','YO_F1_07_Troubleshooting',
+  'YO_F2_DESMALEZADORAS_BR-2m','YO_F2_DESMALEZADORAS_BR-2.2',
+  'YO_F2_DESMALEZADORA_3210CR','YO_F2_DESMALEZADORA_4310V',
+  'YO_F2_ESPECIF_TECNICAS','YO_F2_LUBRICACION','YO_F2_MANTENIMIENTO',
+  'YO_F2_AJUSTES_REGULACIONES','YO_F2_EMBRAGUE_TRANSMISION','YO_F2_TROUBLESHOOTING',
+  'YO_F3_ARADOS CINCELES','YO_F3_ESPARCIDORAS CONTROL','YO_F3_ESPARCIDORAS ETO',
+  'YO_F3_ESPARCIDORAS FLEX','YO_F3_TORQUES Y AJUSTES','YO_F3_MANTENIMIENTO',
+  'YO_F3_TABLAS DE DOSIFICACIÓN','YO_F3_RESOLUCIÓN DE FALLAS',
+  'YO_F4_HM_Desmalezadoras','YO_F4_HR_Rastrillos','YO_F4_LUBRICACION',
+  'YO_F4_AJUSTES_CRITICOS','YO_F4_MANTENIMIENTO','YO_F4_TROUBLESHOOTING',
+  'YO_F5_FERT_RD28','YO_F5_FERT_RD36','YO_F5_RSP_360','YO_F5_TORQUES_AJUSTES',
+  'YO_F5_MANTENIMIENTO','YO_F5_TROUBLESHOOTING','YO_F5_TABLAS_DIST','YO_F5_CHASIS_TH1226',
+  'YO_F6_IMPALA_ORGANICA','YO_F6_MOSCATO_SEGAD','YO_F6_REF_RAPIDA',
+  'YO_F7_FICHAS_TEC','YO_F7_LUBRICACION','YO_F7_AJUSTES','YO_F7_MANTENIMIENTO','YO_F7_ALERTAS_CRIT',
+  'YO_F8_FICHAS_TEC','YO_F8_MANTENIMIENTO','YO_F8_AJUSTES_REG','YO_F8_LUB_REF_RAP','YO_F8_DOSIFICACION',
+  'YO_F9_FICHA_IMPALA','YO_F9_TORQUES_AJUST','YO_F9_MANTENIMIENTO','YO_F9_LUBRICACION',
+  'YO_F9_HIDRAULICO','YO_F9_CALIB_DOSIS','YO_F9_GUILLOTINA_HID','YO_F9_ANCHOS_TRAB',
+  'YO_SEMBR_NEUMÁTICA','YO_FERTILIZAD_CONTROL','YO_DESMALEZAD_DELTA',
+  'YO_TORQUES_AJUSTES','YO_TABLAS_SIEMBRA_PS800','YO_TABLAS_DIST_CONTROL',
+  'YO_DESMALEZADORAS','YO_SEMBRADORAS_APV_PS','YO_TABLAS_SIEMBRA_APV',
+  'YO_DELTA6150_FichaTecnica','YO_DELTA6150_Mantenimiento','YO_DELTA6150_Procedimientos',
+  'YO_FA-FP118_FichaTecnica','YO_FA-FP118_Mantenimiento','YO_FA-FP118_Regulacion'
 ];
 
 // Validar y corregir nombres devueltos por el modelo
