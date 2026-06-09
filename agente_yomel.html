@@ -206,7 +206,7 @@
 </div>
 
 <script>
-const PUB_BASE_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVcyVNJzmu8UBR5yXccxxbbqPKaQPKIrWbLMFhmlzp9RwTIxBPBSeKTVXxiRYGIzyPy5wX9RHqbXhd/pub';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwmMe7JXdrHRbbGrepBtfRwSJbSACEEFZ4OqlDWVuMjdWCZx23V1FU7IGXsLufM0l5P/exec';
 const OTS_CSV_URL     = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVcyVNJzmu8UBR5yXccxxbbqPKaQPKIrWbLMFhmlzp9RwTIxBPBSeKTVXxiRYGIzyPy5wX9RHqbXhd/pub?output=csv';
 const GROQ_MODEL      = 'llama-3.3-70b-versatile';
 const GROQ_URL        = 'https://api.groq.com/openai/v1/chat/completions';
@@ -372,13 +372,11 @@ function setLoadingText(el,text) { const s=el.querySelector('#loadingText'); if(
 
 // ── Fetch de datos ───────────────────────────────────
 async function fetchSheet(sheetName) {
-  const url=`${PUB_BASE_URL}?output=csv&sheet=${encodeURIComponent(sheetName)}`;
+  const url=`${APPS_SCRIPT_URL}?sheet=${encodeURIComponent(sheetName)}`;
   const resp=await fetch(url,{cache:'no-store'});
   if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
   const text=await resp.text();
-  if(text.trim().startsWith('<!DOCTYPE')||text.trim().startsWith('<html')) {
-    throw new Error('Hoja no accesible — verificá que la planilla esté publicada en la web');
-  }
+  if(text.startsWith('ERROR:')) throw new Error(text);
   if(text.trim().length < 10) throw new Error('Hoja vacía o no encontrada');
   return text;
 }
