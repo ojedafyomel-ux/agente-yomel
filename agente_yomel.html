@@ -296,6 +296,49 @@ YOMEL — Sembradoras:
   Sembradoras APV PS → sembradoras APV PS (PS120–PS500 y PS800)
 `.trim();
 
+// Lista completa de hojas válidas (nombres exactos de Google Sheets)
+const VALID_SHEETS = [
+  'MASCAR ANDINA','MASCAR MAGNA','MASCAR MISTRAL',
+  'Desmalezadora 1020 - 1021 LT','Desmalezadora 1320 - 1321 LT',
+  'Desmalezadora 1320 - 1321 BR','Desmalezadora 1510 BR',
+  'Desmalezadora 1520 - 1550 BR','Desmalezadora 1521 - 1551 BR',
+  'Desmalezadora 1810 BR','Desmalezadora 1820 - 1850 BR',
+  'Desmalezadora 1821 - 1851 BR','Desmalezadora 1510 BRL',
+  'Desmalezadora 1550 - 1551 BRL','Desmalezadora 1810 BRL',
+  'Desmalezadora 1850 - 1851 BRL','Desmalezadora 1510 LT',
+  'Desmalezadora 1520 - 1521 LT','Desmalezadora 2010 BR',
+  'Desmalezadora 2020 - 2021 BR','Desmalezadora 2210 BR',
+  'Desmalezadora 2220 - 2221 BR','3210','4310',
+  'Arados cinceles','Esparcidoras control','Esparcidoras ETO',
+  'Esparcidoras Flex','HM 302','HR7',
+  'RDP - RD 1428Z','RDP - RD 2028Z','RDP - RD 3028Z','RSP 360',
+  'Impala Orgánica 4000 - 8000','Moscato 2000 - 2400','Moscato 3070',
+  'RV 15','HRP 4 - 5','RPG 380','RVA 9 - 11',
+  'RDP - RDA 600','RDP - RDA 1050',
+  'Impala 3500','Impala 5000','Impala 6000','Impala 8000','Impala 10000',
+  'APV – SPIN','Control 24 metros','Delta 4630','4330',
+  'Delta 6150','FA – FP 1.18','Sembradoras APV PS'
+];
+
+// Validar y corregir nombres devueltos por el modelo
+function validateSheetNames(names) {
+  return names.map(name => {
+    // Coincidencia exacta
+    if (VALID_SHEETS.includes(name)) return name;
+    // Coincidencia ignorando mayúsculas
+    const lower = name.toLowerCase();
+    const match = VALID_SHEETS.find(v => v.toLowerCase() === lower);
+    if (match) return match;
+    // Coincidencia parcial (el nombre devuelto contiene palabras clave)
+    const partial = VALID_SHEETS.find(v =>
+      v.toLowerCase().includes(lower) || lower.includes(v.toLowerCase())
+    );
+    if (partial) return partial;
+    return null; // no encontrado
+  }).filter(Boolean);
+}
+
+
 // ── Utilidades ──────────────────────────────────────
 function getKey() { return document.getElementById('apiKey').value.trim(); }
 function autoResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,130)+'px'; }
@@ -391,7 +434,9 @@ Seleccioná entre 2 y 4 hojas como máximo. No agregues explicaciones, solo el J
   if(!match) throw new Error('No se pudieron identificar las hojas relevantes.');
   let sheets;
   try { sheets=JSON.parse(match[0]); } catch { throw new Error('Respuesta de selección inválida.'); }
-  return sheets.filter(s=>typeof s==='string'&&s.trim().length>0).slice(0,2);
+  const validated = validateSheetNames(sheets);
+  if (validated.length === 0) throw new Error('No se encontraron hojas válidas para esta consulta.');
+  return validated.slice(0,2);
 }
 
 async function answerWithData(query, sheetsData, otsData, failedSheets) {
