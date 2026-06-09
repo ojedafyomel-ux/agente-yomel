@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agente Técnico — Yomel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:         #fafafa;
+      --surface:    #ffffff;
+      --surface2:   #f4f4f5;
+      --border:     #e4e4e7;
+      --border2:    #d1d1d6;
+      --accent:     #E8231A;
+      --accent2:    #c41a12;
+      --accent-bg:  #fef2f2;
+      --green:      #16a34a;
+      --green-bg:   #f0fdf4;
+      --blue:       #2563eb;
+      --blue-bg:    #eff6ff;
+      --text:       #18181b;
+      --text2:      #52525b;
+      --text3:      #a1a1aa;
+      --mono:       'JetBrains Mono', monospace;
+      --sans:       'Inter', sans-serif;
+      --radius:     10px;
+      --shadow:     0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      height: 100dvh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+    }
+    header {
+      background: var(--accent);
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      height: 60px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(232,35,26,.25);
+    }
+    .logo-mark {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,.18);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono);
+      font-size: 13px; font-weight: 500;
+      color: #fff;
+      letter-spacing: -1px;
+      flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,.25);
+    }
+    .header-title { font-size: 16px; font-weight: 600; letter-spacing: .01em; color: #fff; }
+    .header-sub { font-size: 11.5px; color: rgba(255,255,255,.7); font-family: var(--mono); margin-top: 1px; }
+    .header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    .api-input-wrap {
+      display: flex; align-items: center; gap: 7px;
+      background: rgba(0,0,0,.2);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 8px;
+      padding: 5px 12px;
+    }
+    .api-input-wrap label { font-family: var(--mono); font-size: 10.5px; color: rgba(255,255,255,.65); white-space: nowrap; font-weight: 500; }
+    #apiKey { background: none; border: none; outline: none; color: rgba(255,255,255,.9); font-family: var(--mono); font-size: 12px; width: 170px; }
+    #apiKey::placeholder { color: rgba(255,255,255,.4); }
+    .btn-diag {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 7px;
+      color: rgba(255,255,255,.85);
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 5px 11px;
+      cursor: pointer;
+      transition: background .15s;
+      white-space: nowrap;
+    }
+    .btn-diag:hover { background: rgba(255,255,255,.25); }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.3); transition: background .3s; }
+    .status-dot.live { background: #4ade80; box-shadow: 0 0 6px #4ade80; }
+
+    #chat {
+      overflow-y: auto;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      scroll-behavior: smooth;
+    }
+    #chat::-webkit-scrollbar { width: 5px; }
+    #chat::-webkit-scrollbar-track { background: transparent; }
+    #chat::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+    .msg { display: flex; flex-direction: column; gap: 5px; max-width: 860px; animation: fadeUp .22s ease; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    .msg.user  { align-self: flex-end;  align-items: flex-end; }
+    .msg.agent { align-self: flex-start; align-items: flex-start; }
+    .msg-label { font-family: var(--mono); font-size: 11px; color: var(--text3); letter-spacing: .05em; text-transform: uppercase; padding: 0 4px; font-weight: 500; }
+    .msg-bubble { padding: 14px 18px; border-radius: var(--radius); font-size: 15px; line-height: 1.75; max-width: 100%; box-shadow: var(--shadow); }
+    .msg.user .msg-bubble { background: var(--accent); color: #fff; font-weight: 500; border-bottom-right-radius: 3px; }
+    .msg.agent .msg-bubble { background: var(--surface); border: 1px solid var(--border); color: var(--text); border-bottom-left-radius: 3px; white-space: pre-wrap; }
+    .msg-meta { display: flex; gap: 5px; flex-wrap: wrap; padding: 0 2px; }
+    .tag { font-family: var(--mono); font-size: 10.5px; padding: 2px 8px; border-radius: 5px; font-weight: 500; }
+    .tag.ot  { color: var(--blue);  background: var(--blue-bg);  border: 1px solid #bfdbfe; }
+    .tag.kb  { color: var(--green); background: var(--green-bg); border: 1px solid #bbf7d0; }
+    .tag.err { color: var(--accent); background: var(--accent-bg); border: 1px solid #fecaca; }
+    .tag.warn { color: #92400e; background: #fefce8; border: 1px solid #fde68a; }
+
+    .msg.loading .msg-bubble { background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; gap: 12px; color: var(--text2); font-size: 14px; font-family: var(--mono); }
+    .spinner { width: 16px; height: 16px; border: 2.5px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Panel de diagnóstico */
+    .diag-panel {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      align-self: flex-start;
+      max-width: 680px;
+      width: 100%;
+    }
+    .diag-panel h3 { font-size: 13px; font-weight: 600; margin-bottom: 12px; color: var(--text2); font-family: var(--mono); letter-spacing: .03em; }
+    .diag-row { display: flex; align-items: center; gap: 8px; font-size: 12.5px; padding: 4px 0; border-bottom: 1px solid var(--border); }
+    .diag-row:last-child { border-bottom: none; }
+    .diag-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .diag-dot.ok { background: #4ade80; }
+    .diag-dot.fail { background: var(--accent); }
+    .diag-dot.pending { background: var(--border2); }
+    .diag-name { font-family: var(--mono); font-size: 11.5px; color: var(--text2); flex: 1; }
+    .diag-status { font-size: 11px; color: var(--text3); }
+
+    .welcome { text-align: center; padding: 44px 20px; color: var(--text3); }
+    .welcome-icon { width: 52px; height: 52px; background: var(--accent); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 4px 14px rgba(232,35,26,.3); }
+    .welcome-icon svg { width: 26px; height: 26px; fill: #fff; }
+    .welcome h2 { font-size: 22px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .welcome p { font-size: 15px; line-height: 1.7; max-width: 460px; margin: 0 auto 28px; color: var(--text2); }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 680px; margin: 0 auto; }
+    .chip { background: var(--surface); border: 1.5px solid var(--border); border-radius: 20px; padding: 8px 16px; font-size: 13.5px; color: var(--text2); cursor: pointer; transition: border-color .15s, color .15s, background .15s; font-weight: 500; box-shadow: var(--shadow); }
+    .chip:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+
+    .input-bar { background: var(--surface); border-top: 1.5px solid var(--border); padding: 14px 20px; display: flex; gap: 10px; align-items: flex-end; box-shadow: 0 -2px 8px rgba(0,0,0,.05); }
+    #queryInput { flex: 1; background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: var(--sans); font-size: 15px; padding: 11px 16px; resize: none; outline: none; line-height: 1.55; max-height: 130px; min-height: 46px; transition: border-color .15s, box-shadow .15s; }
+    #queryInput:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,35,26,.1); background: var(--surface); }
+    #queryInput::placeholder { color: var(--text3); }
+    #sendBtn { background: var(--accent); border: none; border-radius: var(--radius); width: 46px; height: 46px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s, transform .1s, box-shadow .15s; flex-shrink: 0; box-shadow: 0 2px 8px rgba(232,35,26,.3); }
+    #sendBtn:hover { background: var(--accent2); box-shadow: 0 4px 12px rgba(232,35,26,.4); }
+    #sendBtn:active { transform: scale(.95); }
+    #sendBtn:disabled { background: var(--border2); cursor: not-allowed; box-shadow: none; }
+    #sendBtn svg { width: 19px; height: 19px; fill: #fff; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-mark">YM</div>
+  <div>
+    <div class="header-title">Agente Técnico Yomel</div>
+    <div class="header-sub">OTs + Base de Conocimiento · LLaMA 3.3 70B</div>
+  </div>
+  <div class="header-right">
+    <button class="btn-diag" onclick="runDiagnostic()" title="Verificar conexión con las fuentes de datos">🔍 Diagnóstico</button>
+    <div class="api-input-wrap">
+      <label>GROQ KEY</label>
+      <input id="apiKey" type="password" placeholder="gsk_..." autocomplete="off" />
+    </div>
+    <div class="status-dot" id="statusDot" title="Estado de conexión"></div>
+  </div>
+</header>
+
+<div id="chat">
+  <div class="welcome" id="welcome">
+    <div class="welcome-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-4H7l5-8v4h4l-5 8z"/></svg>
+    </div>
+    <h2>¿En qué podemos ayudarte hoy?</h2>
+    <p>Consultá sobre fichas técnicas, mantenimiento, fallas, torques, lubricación y el historial de órdenes de trabajo de las máquinas Yomel y Mascar.</p>
+    <div class="chips">
+      <div class="chip" onclick="useChip(this)">Torque de ruedas Mascar Magna</div>
+      <div class="chip" onclick="useChip(this)">Plan de mantenimiento DELTA 6150</div>
+      <div class="chip" onclick="useChip(this)">Solución ruido en transmisión Mistral</div>
+      <div class="chip" onclick="useChip(this)">Lubricante caja Impala 5000</div>
+      <div class="chip" onclick="useChip(this)">OTs abiertas recientes</div>
+      <div class="chip" onclick="useChip(this)">Calibración dosis fertilizadora RD28</div>
+    </div>
+  </div>
+</div>
+
+<div class="input-bar">
+  <textarea id="queryInput" rows="1"
+    placeholder="Preguntá sobre cualquier máquina, falla, mantenimiento o historial de OTs…"
+    oninput="autoResize(this)"
+    onkeydown="handleKey(event)"></textarea>
+  <button id="sendBtn" onclick="handleSend()" title="Enviar (Enter)">
+    <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+  </button>
+</div>
+
+<script>
+const SPREADSHEET_ID = '198HMkr1g50V5r7vDB6Z5uwmdS5Z6UzN52YCY9oAlqV0';
+const OTS_CSV_URL     = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVcyVNJzmu8UBR5yXccxxbbqPKaQPKIrWbLMFhmlzp9RwTIxBPBSeKTVXxiRYGIzyPy5wX9RHqbXhd/pub?output=csv';
+const GROQ_MODEL      = 'llama-3.3-70b-versatile';
+const GROQ_URL        = 'https://api.groq.com/openai/v1/chat/completions';
+
+// Hojas para diagnóstico rápido (una por familia)
+const DIAG_SHEETS = [
+  'MM_Ficha_Tecnica',
+  'YO_DELTA6150_FichaTecnica',
+  'YO_F9_FICHA_IMPALA',
+  'YO_F1_04_Mantenimiento'
+];
+
+const SHEET_CATALOG = `
+MASCAR MAGNA (rotoempacadora de cámara fija):
+  MM_Ficha_Tecnica → especificaciones completas
+  MM_Mantenimiento → plan de mantenimiento preventivo
+  MM_Torques_Ajustes → tabla de torques y ajustes
+  MM_Lubricantes_Consumibles → lubricantes y consumibles
+  MM_Solucion_Problemas → guía de fallas y soluciones
+  MM_Codigos_Error → lista de códigos de error electrónico
+  MM_Sensores → sensores inductivos
+  MM_Senales_Alarmas → señales acústicas y alarmas
+  MM_Procedimientos → procedimientos operativos clave
+
+MASCAR MISTRAL / MISTRAL CUT (rotoempacadora):
+  MISTR_FICHA_TÉCNICA → especificaciones
+  MISTR_MANTENIMIENTO → mantenimiento periódico
+  MISTR_TORQUES_AJUSTES → torques y presiones
+  MISTR_ENGRASE_LUBRICACIÓN → puntos de engrase y lubricantes
+  MISTR_HIDRÁULICO_ELÉCTRICO → instalaciones hidráulica y eléctrica
+  MISTR_FALLAS_CAUSAS_REMEDIOS → diagnóstico de fallas
+  MISTR_SENSORES_DIAGNÓSTICO → sensores y electrónica
+  MISTR_ATADO_CONFIGURACIÓN → sistema de atado
+  MISTR_ALTURAS_TIMÓN → tabla de alturas del timón
+
+MASCAR ANDINA (rotoempacadora):
+  ANDINA_Ficha_Técnica → especificaciones (modelos 120, 120L, 150, 150L, 180, 180L)
+  ANDINA_Mantenimiento → plan de mantenimiento
+  ANDINA_Torques_Ajustes → torques y ajustes críticos
+  ANDINA_Fluidos_Presiones → fluidos, lubricantes y presiones
+  ANDINA_Fallas_Remedios → diagnóstico de fallas
+
+YOMEL — Desmalezadoras serie MA / LT / BR (modelos 1020–1851):
+  YO_F1_01_Indice_Modelos → índice de modelos y códigos de manual
+  YO_F1_02_Especificaciones → tabla comparativa de especificaciones por modelo
+  YO_F1_03_Fluidos_Lubricantes → fluidos y lubricantes
+  YO_F1_04_Mantenimiento → plan de mantenimiento
+  YO_F1_05_Ajustes_Criticos → ajustes y regulaciones críticas
+  YO_F1_06_Procedimientos → procedimientos paso a paso
+  YO_F1_07_Troubleshooting → diagnóstico y resolución de fallas
+
+YOMEL — Desmalezadoras BR 2m y 2.2m (modelos 2010–2221 BR, 3210CR, 4310V):
+  YO_F2_DESMALEZADORAS_BR-2m → ficha técnica serie 2.06m
+  YO_F2_DESMALEZADORAS_BR-2.2 → ficha técnica serie 2.2m
+  YO_F2_DESMALEZADORA_3210CR → ficha técnica 3210CR trituradora
+  YO_F2_DESMALEZADORA_4310V → ficha técnica 4310V articulada
+  YO_F2_ESPECIF_TECNICAS → comparativa de especificaciones
+  YO_F2_LUBRICACION → lubricación todos los modelos
+  YO_F2_MANTENIMIENTO → plan de mantenimiento
+  YO_F2_AJUSTES_REGULACIONES → ajustes y regulaciones
+  YO_F2_EMBRAGUE_TRANSMISION → embrague de fricción y cardán
+  YO_F2_TROUBLESHOOTING → guía de fallas y soluciones
+
+YOMEL — Implementos: arados y esparcidoras (CONTROL/ETO/FLEX):
+  YO_F3_ARADOS CINCELES → arados CIN-5 CF / CIN-7 CF
+  YO_F3_ESPARCIDORAS CONTROL → esparcidora bidisco centrifuga CONTROL
+  YO_F3_ESPARCIDORAS ETO → esparcidora péndular ETO 600 / 1050
+  YO_F3_ESPARCIDORAS FLEX → esparcidoras FLEX 1050A / 1050P
+  YO_F3_TORQUES Y AJUSTES → torques y ajustes todas las familias F3
+  YO_F3_MANTENIMIENTO → mantenimiento preventivo
+  YO_F3_TABLAS DE DOSIFICACIÓN → tablas de dosificación kg/ha
+  YO_F3_RESOLUCIÓN DE FALLAS → guía de fallas para campo
+
+YOMEL — Desmalezadoras/Hileradoras HM y Rastrillos HR:
+  YO_F4_HM_Desmalezadoras → ficha técnica HM 3010 V, HM-302
+  YO_F4_HR_Rastrillos → ficha técnica HR-7 rastrillo lateral
+  YO_F4_LUBRICACION → tabla maestra de lubricación
+  YO_F4_AJUSTES_CRITICOS → ajustes y regulaciones de campo
+  YO_F4_MANTENIMIENTO → checklists de mantenimiento
+  YO_F4_TROUBLESHOOTING → diagnóstico de fallas
+
+YOMEL — Fertilizadoras bidisco RD 2.8m / RD 3.6m / RSP 360:
+  YO_F5_FERT_RD28 → ficha técnica serie RD/RDP 2.8m
+  YO_F5_FERT_RD36 → ficha técnica serie RD/RDP 3.6m
+  YO_F5_RSP_360 → abonadoras RSP 360 SL/CN/2C/SCR
+  YO_F5_TORQUES_AJUSTES → torques todos los modelos RD/RSP
+  YO_F5_MANTENIMIENTO → mantenimiento y lubricación
+  YO_F5_TROUBLESHOOTING → diagnóstico de fallas RSP 360
+  YO_F5_TABLAS_DIST → tablas de distribución kg/ha
+  YO_F5_CHASIS_TH1226 → falso chasis y tractoelevador TH1226
+
+YOMEL — Impala Orgánica y Segadoras Moscato:
+  YO_F6_IMPALA_ORGANICA → ficha técnica Impala Orgánica 4000 / 8000
+  YO_F6_MOSCATO_SEGAD → ficha técnica segadoras Moscato 2000 / 2400
+  YO_F6_REF_RAPIDA → referencia rápida valores clave de campo
+
+YOMEL — Moscato 3070 / RV (segadoras-acondicionadoras):
+  YO_F7_FICHAS_TEC → especificaciones Moscato 3070, RV15
+  YO_F7_LUBRICACION → lubricación Moscato 3070
+  YO_F7_AJUSTES → ajustes y regulaciones
+  YO_F7_MANTENIMIENTO → mantenimiento preventivo
+  YO_F7_ALERTAS_CRIT → alertas y prohibiciones críticas
+
+YOMEL — Fertilizadoras RDP/RD multi-modelo:
+  YO_F8_FICHAS_TEC → fichas de especificaciones múltiples modelos
+  YO_F8_MANTENIMIENTO → plan de mantenimiento
+  YO_F8_AJUSTES_REG → ajustes y parámetros operativos
+  YO_F8_LUB_REF_RAP → lubricación referencia rápida campo
+  YO_F8_DOSIFICACION → tablas de distribución orientativas
+
+YOMEL — Fertilizadoras Impala (3.500 / 5.000 / 6.000 / 8.000 / 10.000 lts):
+  YO_F9_FICHA_IMPALA → ficha técnica completa por modelo
+  YO_F9_TORQUES_AJUST → torques de ajuste
+  YO_F9_MANTENIMIENTO → plan de mantenimiento preventivo
+  YO_F9_LUBRICACION → plan de engrase y lubricación
+  YO_F9_HIDRAULICO → circuito hidráulico
+  YO_F9_CALIB_DOSIS → tablas de dosificación (sistema mecánico)
+  YO_F9_GUILLOTINA_HID → apertura guillotina hidráulica (kg/ha)
+  YO_F9_ANCHOS_TRAB → anchos de trabajo por producto
+  YO_F9_RODAMIENTOS → catálogo de rodamientos y vida útil
+
+YOMEL — Sembradora APV PS 800 / Fertilizadora Control 24m / Delta 4630:
+  YO_SEMBR_NEUMÁTICA → ficha técnica APV PS 800 M1 / HG 450 M1
+  YO_FERTILIZAD_CONTROL → ficha técnica fertilizadora Control 24m (1424/2024/3024)
+  YO_DESMALEZAD_DELTA → ficha técnica desmalezadora Delta 4630
+  YO_TORQUES_AJUSTES → torques fluidos y ajustes referencia rápida
+  YO_TABLAS_SIEMBRA_PS800 → tablas de siembra APV PS 800
+  YO_TABLAS_DIST_CONTROL → tablas distribución urea fertilizadora Control 24m
+
+YOMEL — Desmalezadoras articuladas 4330 / Sembradoras APV:
+  YO_DESMALEZADORAS → ficha técnica desmalezadoras 4330 / 4330 DM
+  YO_SEMBRADORAS_APV_PS → ficha técnica sembradoras APV PS120–PS500
+  YO_TABLAS_SIEMBRA_APV → tablas de siembra APV PS (kg/min)
+
+YOMEL — Desmalezadora DELTA 6150:
+  YO_DELTA6150_FichaTecnica → especificaciones DELTA 6150/540 y 6150/1000
+  YO_DELTA6150_Mantenimiento → plan de mantenimiento
+  YO_DELTA6150_Procedimientos → procedimientos de campo
+
+YOMEL — Fertilizadoras FA 1.18 / FP 1.18:
+  YO_FA-FP118_FichaTecnica → especificaciones FA 1.18 (arrastre) y FP 1.18 (3 puntos)
+  YO_FA-FP118_Mantenimiento → mantenimiento
+  YO_FA-FP118_Regulacion → regulación y cálculo de dosis
+`.trim();
+
+// Lista completa de hojas válidas (nombres exactos de Google Sheets)
+const VALID_SHEETS = [
+  'MM_Ficha_Tecnica','MM_Mantenimiento','MM_Torques_Ajustes',
+  'MM_Lubricantes_Consumibles','MM_Solucion_Problemas','MM_Codigos_Error',
+  'MM_Sensores','MM_Senales_Alarmas','MM_Procedimientos',
+  'MISTR_FICHA_TÉCNICA','MISTR_MANTENIMIENTO','MISTR_TORQUES_AJUSTES',
+  'MISTR_ENGRASE_LUBRICACIÓN','MISTR_HIDRÁULICO_ELÉCTRICO',
+  'MISTR_FALLAS_CAUSAS_REMEDIOS','MISTR_SENSORES_DIAGNÓSTICO',
+  'MISTR_ATADO_CONFIGURACIÓN','MISTR_ALTURAS_TIMÓN',
+  'ANDINA_Ficha_Técnica','ANDINA_Mantenimiento','ANDINA_Torques_Ajustes',
+  'ANDINA_Fluidos_Presiones','ANDINA_Fallas_Remedios',
+  'YO_F1_01_Indice_Modelos','YO_F1_02_Especificaciones',
+  'YO_F1_03_Fluidos_Lubricantes','YO_F1_04_Mantenimiento',
+  'YO_F1_05_Ajustes_Criticos','YO_F1_06_Procedimientos','YO_F1_07_Troubleshooting',
+  'YO_F2_DESMALEZADORAS_BR-2m','YO_F2_DESMALEZADORAS_BR-2.2',
+  'YO_F2_DESMALEZADORA_3210CR','YO_F2_DESMALEZADORA_4310V',
+  'YO_F2_ESPECIF_TECNICAS','YO_F2_LUBRICACION','YO_F2_MANTENIMIENTO',
+  'YO_F2_AJUSTES_REGULACIONES','YO_F2_EMBRAGUE_TRANSMISION','YO_F2_TROUBLESHOOTING',
+  'YO_F3_ARADOS CINCELES','YO_F3_ESPARCIDORAS CONTROL','YO_F3_ESPARCIDORAS ETO',
+  'YO_F3_ESPARCIDORAS FLEX','YO_F3_TORQUES Y AJUSTES','YO_F3_MANTENIMIENTO',
+  'YO_F3_TABLAS DE DOSIFICACIÓN','YO_F3_RESOLUCIÓN DE FALLAS',
+  'YO_F4_HM_Desmalezadoras','YO_F4_HR_Rastrillos','YO_F4_LUBRICACION',
+  'YO_F4_AJUSTES_CRITICOS','YO_F4_MANTENIMIENTO','YO_F4_TROUBLESHOOTING',
+  'YO_F5_FERT_RD28','YO_F5_FERT_RD36','YO_F5_RSP_360','YO_F5_TORQUES_AJUSTES',
+  'YO_F5_MANTENIMIENTO','YO_F5_TROUBLESHOOTING','YO_F5_TABLAS_DIST','YO_F5_CHASIS_TH1226',
+  'YO_F6_IMPALA_ORGANICA','YO_F6_MOSCATO_SEGAD','YO_F6_REF_RAPIDA',
+  'YO_F7_FICHAS_TEC','YO_F7_LUBRICACION','YO_F7_AJUSTES','YO_F7_MANTENIMIENTO','YO_F7_ALERTAS_CRIT',
+  'YO_F8_FICHAS_TEC','YO_F8_MANTENIMIENTO','YO_F8_AJUSTES_REG','YO_F8_LUB_REF_RAP','YO_F8_DOSIFICACION',
+  'YO_F9_FICHA_IMPALA','YO_F9_TORQUES_AJUST','YO_F9_MANTENIMIENTO','YO_F9_LUBRICACION',
+  'YO_F9_HIDRAULICO','YO_F9_CALIB_DOSIS','YO_F9_GUILLOTINA_HID','YO_F9_ANCHOS_TRAB',
+  'YO_SEMBR_NEUMÁTICA','YO_FERTILIZAD_CONTROL','YO_DESMALEZAD_DELTA',
+  'YO_TORQUES_AJUSTES','YO_TABLAS_SIEMBRA_PS800','YO_TABLAS_DIST_CONTROL',
+  'YO_DESMALEZADORAS','YO_SEMBRADORAS_APV_PS','YO_TABLAS_SIEMBRA_APV',
+  'YO_DELTA6150_FichaTecnica','YO_DELTA6150_Mantenimiento','YO_DELTA6150_Procedimientos',
+  'YO_FA-FP118_FichaTecnica','YO_FA-FP118_Mantenimiento','YO_FA-FP118_Regulacion'
+];
+
+// Validar y corregir nombres devueltos por el modelo
+function validateSheetNames(names) {
+  return names.map(name => {
+    // Coincidencia exacta
+    if (VALID_SHEETS.includes(name)) return name;
+    // Coincidencia ignorando mayúsculas
+    const lower = name.toLowerCase();
+    const match = VALID_SHEETS.find(v => v.toLowerCase() === lower);
+    if (match) return match;
+    // Coincidencia parcial (el nombre devuelto contiene palabras clave)
+    const partial = VALID_SHEETS.find(v =>
+      v.toLowerCase().includes(lower) || lower.includes(v.toLowerCase())
+    );
+    if (partial) return partial;
+    return null; // no encontrado
+  }).filter(Boolean);
+}
+
+
+// ── Utilidades ──────────────────────────────────────
+function getKey() { return document.getElementById('apiKey').value.trim(); }
+function autoResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,130)+'px'; }
+function handleKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();handleSend();} }
+function useChip(el) { document.getElementById('queryInput').value=el.textContent; autoResize(document.getElementById('queryInput')); handleSend(); }
+function scrollChat() { const c=document.getElementById('chat'); c.scrollTop=c.scrollHeight; }
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function setDot(live) { document.getElementById('statusDot').className='status-dot'+(live?' live':''); }
+
+function appendMsg(role, content, tags=[]) {
+  const welcome=document.getElementById('welcome'); if(welcome) welcome.remove();
+  const chat=document.getElementById('chat');
+  const div=document.createElement('div'); div.className=`msg ${role}`;
+  const label=role==='user'?'Técnico':'Agente IA';
+  div.innerHTML=`
+    <div class="msg-label">${label}</div>
+    <div class="msg-bubble">${escHtml(content)}</div>
+    ${tags.length?`<div class="msg-meta">${tags.map(t=>`<span class="tag ${t.cls}">${escHtml(t.text)}</span>`).join('')}</div>`:''}
+  `;
+  chat.appendChild(div); scrollChat(); return div;
+}
+
+function appendLoading(text) {
+  const welcome=document.getElementById('welcome'); if(welcome) welcome.remove();
+  const chat=document.getElementById('chat');
+  const div=document.createElement('div'); div.className='msg agent loading';
+  div.innerHTML=`<div class="msg-label">Agente IA</div><div class="msg-bubble"><div class="spinner"></div><span id="loadingText">${escHtml(text)}</span></div>`;
+  chat.appendChild(div); scrollChat(); return div;
+}
+function setLoadingText(el,text) { const s=el.querySelector('#loadingText'); if(s) s.textContent=text; }
+
+// ── Fetch de datos ───────────────────────────────────
+async function fetchSheet(sheetName) {
+  const url=`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
+  const resp=await fetch(url,{cache:'no-store'});
+  if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
+  const text=await resp.text();
+  if(text.trim().startsWith('<!DOCTYPE')||text.trim().startsWith('<html')) throw new Error('Planilla no accesible — compartila como "Cualquier persona con el enlace puede ver"');
+  if(text.trim().length < 10) throw new Error('Hoja vacía o no encontrada');
+  return text;
+}
+
+async function fetchOTs() {
+  const resp=await fetch(OTS_CSV_URL,{cache:'no-store'});
+  if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
+  const text=await resp.text();
+  if(text.trim().startsWith('<!DOCTYPE')||text.trim().startsWith('<html')) {
+    throw new Error('URL de OTs no accesible');
+  }
+  return text;
+}
+
+// Recorta CSV pero preserva encabezado + más filas (límite mayor)
+function trimCsv(csv, maxChars=2500) {
+  if(!csv||csv.trim().length===0) return '(sin datos)';
+  if(csv.length<=maxChars) return csv;
+  const lines=csv.split('\n');
+  let result=lines[0]+'\n'; // encabezado siempre incluido
+  let i=1;
+  while(i<lines.length && result.length+lines[i].length < maxChars) {
+    result+=lines[i]+'\n'; i++;
+  }
+  if(i<lines.length) result+=`\n… (${lines.length-i} filas más omitidas por límite de contexto)`;
+  return result;
+}
+
+// ── Groq ─────────────────────────────────────────────
+async function callGroq(messages, maxTokens=1200) {
+  const key=getKey();
+  if(!key) throw new Error('Ingresá tu GROQ API Key en el campo de arriba a la derecha.');
+  const resp=await fetch(GROQ_URL,{
+    method:'POST',
+    headers:{'Authorization':`Bearer ${key}`,'Content-Type':'application/json'},
+    body:JSON.stringify({model:GROQ_MODEL,messages,max_tokens:maxTokens,temperature:0.1})
+  });
+  if(!resp.ok){const err=await resp.json().catch(()=>({}));throw new Error(err?.error?.message||`Error Groq HTTP ${resp.status}`);}
+  const data=await resp.json();
+  return data.choices?.[0]?.message?.content??'';
+}
+
+async function selectRelevantSheets(query) {
+  const messages=[
+    {role:'system',content:`Sos un selector de documentación técnica de maquinaria agrícola Yomel/Mascar. 
+Tu tarea: elegir las hojas de datos más relevantes para responder la consulta del técnico.
+RESPONDÉ ÚNICAMENTE con un JSON array de strings con los nombres EXACTOS de las hojas (tal como aparecen en el catálogo).
+Seleccioná entre 2 y 4 hojas como máximo. No agregues explicaciones, solo el JSON array.`},
+    {role:'user',content:`Consulta del técnico: "${query}"\n\nCatálogo de hojas disponibles:\n${SHEET_CATALOG}\n\nRespondé SOLO con JSON array. Ejemplo: ["Delta 6150","MASCAR MAGNA"]`}
+  ];
+  const raw=await callGroq(messages,400);
+  const match=raw.match(/\[[\s\S]*?\]/);
+  if(!match) throw new Error('No se pudieron identificar las hojas relevantes.');
+  let sheets;
+  try { sheets=JSON.parse(match[0]); } catch { throw new Error('Respuesta de selección inválida.'); }
+  const validated = validateSheetNames(sheets);
+  if (validated.length === 0) throw new Error('No se encontraron hojas válidas para esta consulta.');
+  return validated.slice(0,2);
+}
+
+async function answerWithData(query, sheetsData, otsData, failedSheets) {
+  const sheetBlocks = sheetsData.length > 0
+    ? sheetsData.map(s => `=== FICHA: ${s.name} ===\n${trimCsv(s.csv, 2500)}`).join('\n\n')
+    : 'ADVERTENCIA: No se pudieron cargar fichas técnicas.';
+
+  const otsBlock = otsData.startsWith('Error') || otsData === '(no se pudo cargar)'
+    ? `ADVERTENCIA: ${otsData}`
+    : trimCsv(otsData, 1500);
+
+  const failNote = failedSheets.length > 0
+    ? `\nNOTA: Las siguientes hojas no se pudieron cargar: ${failedSheets.join(', ')}.`
+    : '';
+
+  const messages=[
+    {role:'system',content:`Sos el asistente técnico oficial de Yomel S.A., empresa argentina de maquinaria agrícola con sede en 9 de Julio, Buenos Aires.
+Tenés acceso a fichas técnicas reales y al historial de órdenes de trabajo (OTs).
+
+REGLAS IMPORTANTES:
+- Respondé SOLO con información que esté presente en los datos que te proveen a continuación
+- Si los datos de una ficha no contienen la información pedida, decilo claramente
+- Si las fichas no se cargaron, indicalo y ofrecé ayuda general
+- Si el historial de OTs tiene datos relevantes, citá el número de OT
+- Usá español rioplatense, técnico y preciso
+- Citá siempre de qué hoja proviene cada dato (ej: "según MM_Torques_Ajustes...")
+- Usá listas para pasos, torques y valores concretos${failNote}`},
+    {role:'user',content:`CONSULTA DEL TÉCNICO: ${query}
+
+━━━ FICHAS TÉCNICAS CARGADAS ━━━
+${sheetBlocks}
+
+━━━ HISTORIAL DE OTs ━━━
+${otsBlock}`}
+  ];
+  return callGroq(messages, 1800);
+}
+
+// ── Diagnóstico ──────────────────────────────────────
+async function runDiagnostic() {
+  const welcome=document.getElementById('welcome'); if(welcome) welcome.remove();
+  const chat=document.getElementById('chat');
+
+  const panel=document.createElement('div');
+  panel.className='msg agent';
+  panel.innerHTML=`
+    <div class="msg-label">Diagnóstico de conexión</div>
+    <div class="diag-panel">
+      <h3>🔍 VERIFICANDO FUENTES DE DATOS…</h3>
+      <div id="diagRows"></div>
+    </div>
+  `;
+  chat.appendChild(panel); scrollChat();
+
+  const rowsEl=panel.querySelector('#diagRows');
+  const sources=[
+    {label:'OTs (Google Sheets publicado)', type:'ots'},
+    ...DIAG_SHEETS.map(s=>({label:s, type:'sheet', name:s}))
+  ];
+
+  for(const src of sources){
+    const row=document.createElement('div');
+    row.className='diag-row';
+    row.innerHTML=`<div class="diag-dot pending"></div><div class="diag-name">${escHtml(src.label)}</div><div class="diag-status">Verificando…</div>`;
+    rowsEl.appendChild(row); scrollChat();
+
+    try {
+      let text;
+      if(src.type==='ots') text=await fetchOTs();
+      else text=await fetchSheet(src.name);
+
+      const lines=text.trim().split('\n').length;
+      row.querySelector('.diag-dot').className='diag-dot ok';
+      row.querySelector('.diag-status').textContent=`✓ OK — ${lines} filas`;
+      row.querySelector('.diag-status').style.color='var(--green)';
+    } catch(err) {
+      row.querySelector('.diag-dot').className='diag-dot fail';
+      row.querySelector('.diag-status').textContent=`✗ ${err.message}`;
+      row.querySelector('.diag-status').style.color='var(--accent)';
+    }
+  }
+
+  // Conclusión
+  const failCount=rowsEl.querySelectorAll('.diag-dot.fail').length;
+  const conclusion=document.createElement('div');
+  conclusion.style.cssText='margin-top:12px;font-size:13px;line-height:1.6;color:var(--text2);';
+  if(failCount===0){
+    conclusion.innerHTML='<strong style="color:var(--green)">✓ Todo conectado correctamente.</strong>';
+  } else {
+    conclusion.innerHTML=`<strong style="color:var(--accent)">⚠ ${failCount} fuente(s) con error.</strong><br>
+Solución: Abrí la planilla de fichas técnicas en Google Sheets → Archivo → Compartir → <strong>"Cualquier persona con el enlace puede ver"</strong> y actualizá la página.`;
+  }
+  rowsEl.appendChild(conclusion); scrollChat();
+}
+
+// ── Flujo principal ──────────────────────────────────
+let isProcessing=false;
+
+async function handleSend() {
+  if(isProcessing) return;
+  const input=document.getElementById('queryInput');
+  const query=input.value.trim(); if(!query) return;
+  const key=getKey();
+  if(!key){
+    appendMsg('agent','⚠ Por favor ingresá tu Groq API Key en el campo de arriba a la derecha.',[{cls:'err',text:'sin API key'}]);
+    return;
+  }
+  isProcessing=true;
+  document.getElementById('sendBtn').disabled=true;
+  input.value=''; input.style.height='auto'; setDot(false);
+  appendMsg('user',query);
+  const loadEl=appendLoading('Identificando documentos relevantes…');
+
+  try {
+    const selectedSheets=await selectRelevantSheets(query);
+    setLoadingText(loadEl,`Consultando ${selectedSheets.length} ficha(s) técnica(s) y OTs…`);
+
+    const [sheetsResults, otsRaw]=await Promise.all([
+      Promise.allSettled(selectedSheets.map(async name=>({name, csv:await fetchSheet(name)}))),
+      fetchOTs().catch(e=>`Error al cargar OTs: ${e.message}`)
+    ]);
+
+    const sheetsData=sheetsResults
+      .filter(r=>r.status==='fulfilled')
+      .map(r=>r.value);
+    const failedSheets=sheetsResults
+      .filter(r=>r.status==='rejected')
+      .map((_,i)=>selectedSheets[i]);
+
+    setLoadingText(loadEl,'Generando respuesta…');
+    const answer=await answerWithData(query, sheetsData, otsRaw, failedSheets);
+    loadEl.remove();
+
+    const tags=[{cls:'ot',text:'📋 OTs'}];
+    sheetsData.forEach(s=>tags.push({cls:'kb',text:`📄 ${s.name}`}));
+    if(failedSheets.length) failedSheets.forEach(n=>tags.push({cls:'err',text:`✗ ${n}`}));
+
+    appendMsg('agent',answer,tags);
+    setDot(true);
+  } catch(err) {
+    loadEl.remove();
+    appendMsg('agent',`Error: ${err.message}`,[{cls:'err',text:'error'}]);
+    setDot(false);
+  } finally {
+    isProcessing=false;
+    document.getElementById('sendBtn').disabled=false;
+  }
+}
+
+// Persistir API key en sesión
+document.getElementById('apiKey').addEventListener('input',function(){
+  sessionStorage.setItem('yomel_groq_key',this.value);
+});
+const savedKey=sessionStorage.getItem('yomel_groq_key');
+if(savedKey) document.getElementById('apiKey').value=savedKey;
+</script>
+</body>
+</html>
